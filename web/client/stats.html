@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
+    <script type='text/javascript' src='js/client.js'></script>
+    <script src='countries-tea-production.js'></script>
+    <script src="http://use.edgefonts.net/alexa-std.js"></script>
+    <!-- Locally we need http. See https://edgewebfonts.adobe.com/help#the-javascript-tag -->
+    <!--
+    <script src="http://use.edgefonts.net/alexa-std.js"></script>
+    -->
+    <style type="text/css">
+      h1{
+        font-family: alexa-std, sans-serif;
+        font-style: normal;
+        font-weight: 400;
+      }
+    </style>
+    <script type='text/javascript'>
+     google.load('visualization', '1', {'packages': ['geochart']});
+     google.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'Popularity'],
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+        ]);
+        var data = google.visualization.arrayToDataTable(countriesTeaProduction);
+
+        var options = {
+          backgroundColor: 'b1d0fe',  // b1d0fe = Google maps water
+          region: 'world',  //  world is default
+          //datalessRegionColor: 'white',
+          //colorAxis: {minValue: 0,  colors: ['#FF0000', '#00FF00']},
+          // efe6dc, 109618 is default green
+          colorAxis: {colors: ['#d1dbc2', '#109618']},
+          //colorAxis: {colors: ['blue', 'green', 'red']},
+          resolution: 'countries'
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+
+
+        var optionsChina = {
+          backgroundColor: 'b1d0fe',  // b1d0fe = Google maps water
+          region: 'world',  //  world is default
+          //datalessRegionColor: 'white',
+          //colorAxis: {minValue: 0,  colors: ['#FF0000', '#00FF00']},
+          // efe6dc, 109618 is default green
+          colorAxis: {colors: ['#d1dbc2', '#109618']},
+          //colorAxis: {colors: ['blue', 'green', 'red']},
+          resolution: 'countries'
+        };
+        //var chart = new google.visualization.GeoChart(document.getElementById('chart_div_china'));
+        //chart.draw(data, optionsChina);
+    };
+    </script>
+  </head>
+  <body>
+    <center>
+      <h1>Tea Production World Map</h1>
+      <div id="chart_div" style="width: 1000px; height: 700px;"></div>
+
+      <h1>Tea Production China</h1>
+      <div id="chart_div_china" style="width: 1000px; height: 700px;"></div>
+    </center>
+  </body>
+</html>
