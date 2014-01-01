@@ -8,7 +8,7 @@
 # 
 # CODES
 # - items: 667=tea, 656=coffee, green, 221=almonds
-# - countries: 351=China, 100=India
+# - countries: 351=China, 100=India, 38=Sri Lanka
 # - elements: 5312=area harvested(Ha) 5419=Yield(Hg/Ha) 5510=Production Quantity(tonnes) 5525=Seed(tonnes)
 
 # China Tea production per year

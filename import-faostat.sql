@@ -1,7 +1,9 @@
 # Should add 2254078 entries to production table
 # Call this script with --enable-local-infile=1
 # Or add loose-local-infile=1 to [client] section in /etc/mysql/my.cf
-# To show warnings, run mysql client with --show-warnings option
+# To show warnings, run mysql client with --show-warnings optiony
+
+# I executed the script with user root (password h*****)
 
 DROP DATABASE IF EXISTS tea;
 
