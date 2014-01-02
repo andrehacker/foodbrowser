@@ -31,50 +31,77 @@ countryIDs['Sri Lanka'] = 38;
 
 // elements: 5312=area harvested(Ha) 5419=Yield(Hg/Ha) 5510=Production Quantity(tonnes) 5525=Seed(tonnes)
 
+
+/*
+ * Countries
+ */
+app.get('/countries', function(req, res) {
+  var sql = "SELECT country_code, name as country_name \
+    FROM countries \
+    WHERE \
+      type=1"
+  getResult(req, res, sql)
+});
+
+/*
+ * Products
+ */
+app.get('/products', function(req, res) {
+  var sql = "SELECT item_code as product_code, name as product_name \
+    FROM items"
+  getResult(req, res, sql)
+});
+
+/*
+ * 1 product, 1 type, N countries
+ */
 // Add route using app.<http-method>(url, function)
 app.get('/product/:product/production', function(req, res) {
   // get ID of the product
-  var productID = productIDs[req.params.product]
-  if (productID == undefined) {
-    res.json('unknown product \'' + req.params.product + '\'');
-    return;
-  }
+//  var productID = productIDs[req.params.product]
+//  if (productID == undefined) {
+//    res.json('unknown product \'' + req.params.product + '\'');
+//    return;
+//  }
   console.log(req.params.product)
   var sql = "SELECT c.name, sum(value) AS summ \
-  FROM production p \
-  INNER JOIN countries c ON c.country_code = p.country_code \
-  WHERE \
-    item_code={productid} \
-    AND year=2011 \
-    AND p.country_code < 5000 \
-    AND element_code=5510 \
-  GROUP BY p.country_code \
-  ORDER BY summ DESC;".replace('{productid}', productID)
-  getStats(req, res, sql)
+    FROM production p \
+    INNER JOIN countries c ON c.country_code = p.country_code \
+    WHERE \
+      item_code={productid} \
+      AND year=2011 \
+      AND p.country_code < 5000 \
+      AND element_code=5510 \
+    GROUP BY p.country_code \
+    ORDER BY summ DESC;".replace('{productid}', req.params.product)
+  getResult(req, res, sql)
 });
 
+/*
+ * 1 country, 1 type, N products
+ */
 app.get('/country/:country/production', function(req, res) {
-  var countryID = countryIDs[req.params.country]
-  if (countryID == undefined) {
-    res.json('unknown country \'' + req.params.country + '\'');
-    return;
-  }
-  console.log('' + countryID);
+//  var countryID = countryIDs[req.params.country]
+//  if (countryID == undefined) {
+//    res.json('unknown country \'' + req.params.country + '\'');
+//    return;
+//  }
+  console.log('' + req.params.country);
   var sql = "SELECT c.name, year, i.name, value AS production \
-  FROM production p \
-  INNER JOIN countries c ON c.country_code = p.country_code \
-  INNER JOIN items i ON i.item_code = p.item_code \
-  WHERE year=2011 AND p.country_code={countryid} AND value<>0 AND element_code=5510 \
-  ORDER BY value desc;".replace('{countryid}', countryID)
-  getStats(req, res, sql)
+    FROM production p \
+    INNER JOIN countries c ON c.country_code = p.country_code \
+    INNER JOIN items i ON i.item_code = p.item_code \
+    WHERE year=2011 AND p.country_code={countryid} AND value<>0 AND element_code=5510 \
+    ORDER BY value desc;".replace('{countryid}', req.params.country)
+  getResult(req, res, sql)
 });
 
-function getStats(req, res, sql) {
+function getResult(req, res, sql) {
   console.log(sql)
   connection.query(sql, function(err, rows, fields) {
     if (err) throw err;
 
-    console.log('The solution is: ', rows);
+//    console.log('The solution is: ', rows);
 
     res.json(rows);
   });

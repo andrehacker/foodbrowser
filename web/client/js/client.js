@@ -4,8 +4,18 @@ google.load('visualization', '1', {packages:['table']});
 google.load("visualization", "1", {packages:["corechart"]});
 google.load('visualization', '1', {'packages': ['geochart']});
 
-google.setOnLoadCallback(getTeaProduction);
-google.setOnLoadCallback(getCountryProduction);
+google.setOnLoadCallback(onGoogleLoad);
+
+var TABLE_PAGE_SIZE = 15;
+
+function onGoogleLoad() {
+  getAllProducts();
+  getAllCountries();
+  getProduction(667);
+  getCountryProduction(351);
+  // 351 = china
+  // 667 = tea
+}
 
 var optionsMap = {
   backgroundColor: 'b1d0fe',  // b1d0fe = Google maps water
@@ -18,9 +28,49 @@ var optionsMap = {
   resolution: 'countries'
 };
 
-function getTeaProduction()
-{
-  $.getJSON('/product/tea/production', function(data) {
+function getAllProducts() {
+  $.getJSON('/products', function(data) {
+    data.sort(function(a, b) { 
+      return a.product_name > b.product_name;
+    })
+    var options = $("#product-select");
+    for(var i=0; i<data.length; i++) {
+      //countries[data[i].country_name] = data[i].country_code;
+      options.append($("<option />").val(data[i].product_code).text(data[i].product_name));
+    }
+  });
+}
+
+//var countries = new Array();
+function getAllCountries() {
+  $.getJSON('/countries', function(data) {
+    data.sort(function(a, b) { 
+      return a.country_name > b.country_name;
+    })
+    var options = $("#country-select");
+    for(var i=0; i<data.length; i++) {
+      //countries[data[i].country_name] = data[i].country_code;
+      options.append($("<option />").val(data[i].country_code).text(data[i].country_name));
+    }
+  });
+}
+
+function switchProduct(value) {
+  getProduction(value);
+  $("#product-select")[0].selectedIndex = 0;
+  var productName = $("#product-select option[value='" + value + "']").text()
+  $("#product-header").html(productName + " Production World Map");
+}
+
+function switchCountry(value) {
+  getCountryProduction(value);
+  $("#country-select")[0].selectedIndex = 0;
+  var countryName = $("#country-select option[value='" + value + "']").text()
+  $("#country-header").html(countryName + " Production");
+}
+
+function getProduction(productID) {
+  $.getJSON('/product/$product-id/production'.replace('$product-id',productID), function(data) {
 //    alert(JSON.stringify(data))
 
     var datatable = new google.visualization.DataTable();
@@ -43,13 +93,12 @@ function getTeaProduction()
 
     // draw table
     var table = new google.visualization.Table(document.getElementById('table_div'));
-    table.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:20});
+    table.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:TABLE_PAGE_SIZE});
   });
 }
 
-function getCountryProduction()
-{
-  $.getJSON('/country/Sri Lanka/production', function(data) {
+function getCountryProduction(countryID) {
+  $.getJSON('/country/$country-id/production'.replace('$country-id',countryID), function(data) {
 //    alert(JSON.stringify(data))
 
     var datatable = new google.visualization.DataTable();

@@ -2,7 +2,7 @@
 # ----- CREATE DIMENSION TABLES -----
 
 # Extract countries
-DROP TABLE IF EXISTS countries
+DROP TABLE IF EXISTS countries;
 CREATE TABLE countries AS SELECT CAST(country_code AS UNSIGNED) as code, country AS name FROM production_raw GROUP BY country_code, country;
 ALTER TABLE countries CHANGE code country_code INT NOT NULL PRIMARY KEY;
 
@@ -13,12 +13,12 @@ ALTER TABLE countries ADD COLUMN type INT NOT NULL DEFAULT 1;
 UPDATE countries set type = 2 where country_code >= 5000;
 
 # Extract items
-DROP TABLE IF EXISTS items
+DROP TABLE IF EXISTS items;
 CREATE TABLE items AS SELECT CAST(item_code AS UNSIGNED) as code, item AS name FROM production_raw GROUP BY item_code, item;
 ALTER TABLE items CHANGE code item_code INT NOT NULL PRIMARY KEY;
 
 # Extract elements
-DROP TABLE IF EXISTS elements
+DROP TABLE IF EXISTS elements;
 CREATE TABLE elements AS
   SELECT CAST(element_code AS UNSIGNED) as code, element_group, element AS name, unit FROM production_raw GROUP BY element_code, element_group, element, unit;
 ALTER TABLE elements CHANGE code element_code INT NOT NULL PRIMARY KEY;

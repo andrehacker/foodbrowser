@@ -2,6 +2,7 @@
   <head>
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
+    <script type='text/javascript' src='js/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/client.js'></script>
     <!--<script src="http://use.edgefonts.net/alexa-std.js"></script>-->
     <!-- Locally we need http. See https://edgewebfonts.adobe.com/help#the-javascript-tag -->
@@ -15,32 +16,80 @@
       }
     </style>
     -->
+    <style type="text/css">
+      body {
+        min-height: 2000px;
+        padding-top: 70px;
+      }
+    </style>
     <script type='text/javascript'>
       google.load('visualization', '1', {'packages': ['geochart']});
     </script>
   </head>
   <body>
-    <h1>Tea Production World Map</h1>
-    <div class="row">
-      <div class="col-md-8">
-        <div id="map_div" style="width: 90%"></div>
-      </div>
-      <div class="col-md-4">
-        <div id="table_div" style="width: 90%"></div>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Tea Stats</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
     </div>
-    <!--
-    <div class="row">
-      <div class="col-md-12">
-        <div id="bar_div" style="width: 90%;height: 4000px;"></div>
+
+    <div class="container">
+      <h1 id="product-header">Tea Production World Map</h1>
+      <!--<div class="dropdown">
+        <a data-toggle="dropdown" href="#">Dropdown trigger</a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <li><h1>test1</h1></li>
+          <li>test2</li>
+        </ul>
       </div>
-    </div>
-    -->
-    <h1>Production China</h1>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="bar_table_div" style="width: 90%"></div>
+      -->
+      <select id="product-select" onchange="switchProduct(value);">
+        <option>Change product</option>
+      </select>
+      <div class="row">
+        <div class="col-md-8">
+          <div id="map_div" style="width: 95%"></div>
+        </div>
+        <div class="col-md-4">
+          <div id="table_div" style="width: 95%"></div>
+        </div>
       </div>
+      <!--
+      <div class="row">
+        <div class="col-md-12">
+          <div id="bar_div" style="width: 90%;height: 4000px;"></div>
+        </div>
+      </div>
+      -->
+      <h1 id="country-header">China Production</h1>
+      <select id="country-select" onchange="switchCountry(value);">
+        <option>Change country</option>
+      </select>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="bar_table_div" style="width: 95%"></div>
+        </div>
+      </div>
+
+
+      <h1 id="contact">Contact</h1>
+      This website was developed by André Hacker.
+      The data are taken from <a href="http://faostat.fao.org/">FAOSTAT</a>, the Food and Agriculture Organization of the United Nations.
     </div>
   </body>
 </html>

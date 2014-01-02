@@ -3,7 +3,9 @@
 # Or add loose-local-infile=1 to [client] section in /etc/mysql/my.cf
 # To show warnings, run mysql client with --show-warnings optiony
 
-# I executed the script with user root (password h*****)
+# How to execute:
+# mysql --enable-local-infile=1 -u root -p
+# source import-faostat.sql
 
 DROP DATABASE IF EXISTS tea;
 
@@ -35,3 +37,5 @@ IGNORE 1 LINES;
 #(field1, @dummy, field2, @rechenVar)
 #SET field3 = @rechenVar*10
 
+
+# http://www.postgresql.org/docs/current/static/sql-copy.html
