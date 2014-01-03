@@ -12,3 +12,14 @@ Includes
 - highlight the country which is selected in list.
 - Add game: Which country produces/imports/exports most tea/coffee/...
 - ...
+
+<!--
+NodeJS ORM Mapper and 
+http://dailyjs.com/2013/04/15/node-database-library/
+- sql
+- sequelize
+- squel
+
+Drivers
+- mysql and pg
+-->
