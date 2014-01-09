@@ -18,7 +18,8 @@ SELECT name, year, value FROM production p
   ORDER BY year DESC LIMIT 10;
 
 # Top Countries for product xy
-SELECT c.name, element_code, sum(value) AS summ
+# TODO: Get rid of min
+SELECT min(c.name), min(element_code), sum(value) AS summ
   FROM production p
   INNER JOIN countries c ON c.country_code = p.country_code
   WHERE
@@ -26,7 +27,7 @@ SELECT c.name, element_code, sum(value) AS summ
     AND year=2011
     AND p.country_code < 5000
     AND element_code=5510
-  GROUP BY p.country_code
+  GROUP BY (c.name, c.country_code)
   ORDER BY summ DESC;
 
 # Top products of country xy, in year 2011

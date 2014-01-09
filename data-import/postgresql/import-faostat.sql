@@ -1,17 +1,21 @@
-# How to execute:
-# mysql --enable-local-infile=1 -u root -p
-# source import-faostat.sql
-# 
-# Should add 2254078 entries to production table
+-- How to execute:
+-- Execute as user postgres
+-- 
+-- Should add 2254078 entries to production table
 
-DROP DATABASE IF EXISTS tea;
+-- make sure we have user postgres (to be able to delete tea)
+--\c postgres
 
-CREATE DATABASE tea;
+--DROP DATABASE IF EXISTS tea;
 
-USE tea;
+--CREATE DATABASE tea;
 
-CREATE TABLE tea.production_raw (
-#  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--\c tea
+
+set client_encoding to 'latin1';
+
+--  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE production_raw (
   country_code VARCHAR(10),
   country VARCHAR(50),
   item_code VARCHAR(10),
@@ -25,14 +29,20 @@ CREATE TABLE tea.production_raw (
   flag VARCHAR(10)
 );
 
-LOAD DATA LOCAL INFILE 'tea-datasets/faostat/Production_Crops_E_All_Data.csv'
-INTO TABLE tea.production_raw
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\r\n'
-IGNORE 1 LINES;
-#(field1, @dummy, field2, @rechenVar)
-#SET field3 = @rechenVar*10
+COPY production_raw
+ FROM '/home/andre/dev/tea/tea-datasets/faostat/Production_Crops_E_All_Data.csv'
+ WITH DELIMITER ',' ESCAPE '"'
+ CSV HEADER;
+--  FORMAT csv HEADER true ESCAPE '"'
+
+--LOAD DATA LOCAL INFILE '../tea-datasets/faostat/Production_Crops_E_All_Data.csv'
+-- INTO TABLE tea.production_raw
+-- FIELDS TERMINATED BY ','
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\r\n'
+-- IGNORE 1 LINES;
+--(field1, @dummy, field2, @rechenVar)
+--SET field3 = @rechenVar*10
 
 
-# http://www.postgresql.org/docs/current/static/sql-copy.html
+-- http://www.postgresql.org/docs/current/static/sql-copy.html

@@ -14,6 +14,9 @@ Includes
 - ...
 
 <!--
+Postgres Import
+https://devcenter.heroku.com/articles/heroku-postgres-import-export#import
+
 NodeJS ORM Mapper and 
 http://dailyjs.com/2013/04/15/node-database-library/
 - sql

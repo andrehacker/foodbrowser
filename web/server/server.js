@@ -1,36 +1,46 @@
+/*
+ * REST API for faostat statistics
+ * 
+ * There are two ways to support complex queries:
+ * 1) GET and parameters
+ * 2) POST and query object
+ * Hard to say what is better for our purpose...
+ */
+
+
 var express = require('express');
+var pg = require('pg');
 
 // Create express server instance
 var app = express();
 
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'hannek',
-  database : 'tea'
+//var mysql      = require('mysql');
+//var connection = mysql.createConnection({
+//  host     : 'localhost',
+//  user     : 'root',
+//  password : 'hannek',
+//  database : 'tea'
+//});
+//connection.connect();
+
+// postgres://USER:PASS@HOST/DATABASE
+var conString = "postgres://postgres:postgres@localhost/tea";
+
+var client = new pg.Client(conString);
+client.connect(function(err) {
+  if(err) {
+    return console.error('could not connect to postgres', err);
+  }
 });
-connection.connect();
 
 app.configure(function () {
     app.use(
-        "/", //the URL throught which you want to access to you static content
-        express.static('/home/andre/dev/tea/web/client') //where your static content is located in your filesystem
+        "/", //the URL through which to access to static content
+        express.static('web/client') // location of static content
     );
 });
 
-// TODO read mapping into memory
-var productIDs = new Array()
-productIDs['tea'] = 667;
-productIDs['coffee'] = 656;
-
-var countryIDs = new Array()
-countryIDs['china'] = 351;
-countryIDs['india'] = 100;
-countryIDs['Sri Lanka'] = 38;
-
 // elements: 5312=area harvested(Ha) 5419=Yield(Hg/Ha) 5510=Production Quantity(tonnes) 5525=Seed(tonnes)
-
 
 /*
  * Countries
@@ -53,57 +63,60 @@ app.get('/products', function(req, res) {
 });
 
 /*
+ * Elements (e.g. production, yield, ...)
+ */
+app.get('/types', function(req, res) {
+  var sql = "SELECT element_code as type_id, name, unit \
+    FROM elements"
+  getResult(req, res, sql)
+});
+
+/*
  * 1 product, 1 type, N countries
  */
 // Add route using app.<http-method>(url, function)
-app.get('/product/:product/production', function(req, res) {
-  // get ID of the product
-//  var productID = productIDs[req.params.product]
-//  if (productID == undefined) {
-//    res.json('unknown product \'' + req.params.product + '\'');
-//    return;
-//  }
-  console.log(req.params.product)
-  var sql = "SELECT c.name, sum(value) AS summ \
+app.get('/perproduct', function(req, res) {
+  console.log(req.query.q)
+  var sql = "SELECT min(c.name) AS name, sum(value) AS summ \
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     WHERE \
       item_code={productid} \
-      AND year=2011 \
+      AND year={year} \
       AND p.country_code < 5000 \
-      AND element_code=5510 \
+      AND element_code={typeid} \
     GROUP BY p.country_code \
-    ORDER BY summ DESC;".replace('{productid}', req.params.product)
+    ORDER BY summ DESC;"
+    .replace('{productid}', req.query.productid)
+    .replace('{typeid}', req.query.typeid)
+    .replace('{year}', req.query.year);
   getResult(req, res, sql)
 });
 
 /*
  * 1 country, 1 type, N products
  */
-app.get('/country/:country/production', function(req, res) {
-//  var countryID = countryIDs[req.params.country]
-//  if (countryID == undefined) {
-//    res.json('unknown country \'' + req.params.country + '\'');
-//    return;
-//  }
-  console.log('' + req.params.country);
+app.get('/percountry', function(req, res) {
+  console.log(req.query.q)
   var sql = "SELECT c.name, year, i.name, value AS production \
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     INNER JOIN items i ON i.item_code = p.item_code \
     WHERE year=2011 AND p.country_code={countryid} AND value<>0 AND element_code=5510 \
-    ORDER BY value desc;".replace('{countryid}', req.params.country)
+    ORDER BY value desc;".replace('{countryid}', req.query.countryid)
   getResult(req, res, sql)
 });
 
 function getResult(req, res, sql) {
   console.log(sql)
-  connection.query(sql, function(err, rows, fields) {
+  client.query(sql, function(err, rows, fields) {
     if (err) throw err;
 
 //    console.log('The solution is: ', rows);
 
-    res.json(rows);
+    // Postgre result is stored in .rows property.
+    // MySql result can be returned directly
+    res.json(rows.rows);
   });
 }
 

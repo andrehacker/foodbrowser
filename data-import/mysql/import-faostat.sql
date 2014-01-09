@@ -28,7 +28,7 @@ CREATE TABLE tea.production_raw (
   flag VARCHAR(10)
 );
 
-LOAD DATA LOCAL INFILE 'tea-datasets/faostat/Production_Crops_E_All_Data.csv'
+LOAD DATA LOCAL INFILE '../tea-datasets/faostat/Production_Crops_E_All_Data.csv'
 INTO TABLE tea.production_raw
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'

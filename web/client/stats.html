@@ -43,13 +43,16 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#contact">Contact</a></li>
+            <li><div id='ajaxloading' style="background: url(img/loading.gif) no-repeat center;width:50px;height:50px;"><!--<img src='img/loading.gif'/>--></div></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
 
     <div class="container">
-      <h1 id="product-header">Tea Production World Map</h1>
+      <div class="row"><div class="col-md-12">
+        <h2 id="product-header">Production per Product</h2>
+      </div></div>
       <!--<div class="dropdown">
         <a data-toggle="dropdown" href="#">Dropdown trigger</a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -58,15 +61,29 @@
         </ul>
       </div>
       -->
-      <select id="product-select" onchange="switchProduct(value);">
-        <option>Change product</option>
-      </select>
       <div class="row">
-        <div class="col-md-8">
-          <div id="map_div" style="width: 95%"></div>
+        <div class="col-md-3" style="padding-bottom:10px;">
+          <select id="product-select" class="form-control" onchange="switchProduct(value);">
+            <option>Loading...</option>
+          </select>
         </div>
-        <div class="col-md-4">
-          <div id="table_div" style="width: 95%"></div>
+        <div class="col-md-3" style="padding-bottom:10px;">
+          <select id="type-select" class="form-control" onchange="switchType(value);">
+            <option>Loading...</option>
+          </select>
+        </div>
+        <div class="col-md-3" style="padding-bottom:10px;">
+          <select id="year-select" class="form-control" onchange="switchYear(value);">
+            <option>2011</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-9">
+          <div id="map_div" style="width: 100%"></div>
+        </div>
+        <div class="col-md-3">
+          <div id="per_product_table_div" style="width: 100%"></div>
         </div>
       </div>
       <!--
@@ -76,20 +93,24 @@
         </div>
       </div>
       -->
-      <h1 id="country-header">China Production</h1>
-      <select id="country-select" onchange="switchCountry(value);">
-        <option>Change country</option>
-      </select>
+      <div class="row"><div class="col-md-12">
+        <h2 id="country-header">Production per Country</h2>
+      </div></div>
+      <div class="row"><div class="col-md-3" style="padding-bottom:10px;">
+        <select id="country-select" class="form-control" onchange="switchCountry(value);">
+          <option>Loading...</option>
+        </select>
+      </div></div>
       <div class="row">
         <div class="col-md-12">
-          <div id="bar_table_div" style="width: 95%"></div>
+          <div id="per_country_table_div" style="width: 100%"></div>
         </div>
       </div>
 
 
       <h1 id="contact">Contact</h1>
       This website was developed by André Hacker.
-      The data are taken from <a href="http://faostat.fao.org/">FAOSTAT</a>, the Food and Agriculture Organization of the United Nations.
+      All data are taken from <a href="http://faostat.fao.org/">FAOSTAT</a>, the Food and Agriculture Organization of the United Nations.
     </div>
   </body>
 </html>
