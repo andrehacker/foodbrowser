@@ -34,10 +34,10 @@ client.connect(function(err) {
 });
 
 app.configure(function () {
-    app.use(
-        "/", //the URL through which to access to static content
-        express.static('web/client') // location of static content
-    );
+  app.use(
+    "/", //the URL through which to access to static content
+    express.static('web/client') // location of static content
+  );
 });
 
 // elements: 5312=area harvested(Ha) 5419=Yield(Hg/Ha) 5510=Production Quantity(tonnes) 5525=Seed(tonnes)

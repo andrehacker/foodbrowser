@@ -1,32 +1,15 @@
 <html>
   <head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
     <script type='text/javascript' src='js/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/client.js'></script>
-    <!--<script src="http://use.edgefonts.net/alexa-std.js"></script>-->
-    <!-- Locally we need http. See https://edgewebfonts.adobe.com/help#the-javascript-tag -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!--
-    <style type="text/css">
-      h1{
-        font-family: alexa-std, sans-serif;
-        font-style: normal;
-        font-weight: 400;
-      }
-    </style>
-    -->
-    <style type="text/css">
-      body {
-        min-height: 2000px;
-        padding-top: 70px;
-      }
-    </style>
-    <script type='text/javascript'>
-      google.load('visualization', '1', {'packages': ['geochart']});
-    </script>
   </head>
   <body>
+
+    <!-- HEADER -->
 
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
@@ -43,37 +26,31 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><div id='ajaxloading' style="background: url(img/loading.gif) no-repeat center;width:50px;height:50px;"><!--<img src='img/loading.gif'/>--></div></li>
+            <li><div id='ajaxloading' style="background: url(img/loading.gif) no-repeat center;width:50px;height:50px;"></div></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </div>
+
+    <!-- PER PRODUCT -->
 
     <div class="container">
       <div class="row"><div class="col-md-12">
         <h2 id="product-header">Production per Product</h2>
       </div></div>
-      <!--<div class="dropdown">
-        <a data-toggle="dropdown" href="#">Dropdown trigger</a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-          <li><h1>test1</h1></li>
-          <li>test2</li>
-        </ul>
-      </div>
-      -->
       <div class="row">
         <div class="col-md-3" style="padding-bottom:10px;">
-          <select id="product-select" class="form-control" onchange="switchProduct(value);">
+          <select id="product-select" class="form-control" onchange="StatsModule.switchProduct(value);">
             <option>Loading...</option>
           </select>
         </div>
         <div class="col-md-3" style="padding-bottom:10px;">
-          <select id="type-select" class="form-control" onchange="switchType(value);">
+          <select id="type-select" class="form-control" onchange="StatsModule.switchType(value);">
             <option>Loading...</option>
           </select>
         </div>
         <div class="col-md-3" style="padding-bottom:10px;">
-          <select id="year-select" class="form-control" onchange="switchYear(value);">
+          <select id="year-select" class="form-control" onchange="StatsModule.switchYear(value);">
             <option>2011</option>
           </select>
         </div>
@@ -86,18 +63,14 @@
           <div id="per_product_table_div" style="width: 100%"></div>
         </div>
       </div>
-      <!--
-      <div class="row">
-        <div class="col-md-12">
-          <div id="bar_div" style="width: 90%;height: 4000px;"></div>
-        </div>
-      </div>
-      -->
+
+      <!-- PER COUNTRY -->
+
       <div class="row"><div class="col-md-12">
         <h2 id="country-header">Production per Country</h2>
       </div></div>
       <div class="row"><div class="col-md-3" style="padding-bottom:10px;">
-        <select id="country-select" class="form-control" onchange="switchCountry(value);">
+        <select id="country-select" class="form-control" onchange="StatsModule.switchCountry(value);">
           <option>Loading...</option>
         </select>
       </div></div>
@@ -111,6 +84,7 @@
       <h1 id="contact">Contact</h1>
       This website was developed by André Hacker.
       All data are taken from <a href="http://faostat.fao.org/">FAOSTAT</a>, the Food and Agriculture Organization of the United Nations.
+
     </div>
   </body>
 </html>
