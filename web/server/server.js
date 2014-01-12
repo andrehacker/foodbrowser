@@ -10,6 +10,7 @@
 
 var express = require('express');
 var pg = require('pg');
+var path = require('path');
 
 // Create express server instance
 var app = express();
@@ -34,9 +35,11 @@ client.connect(function(err) {
 });
 
 app.configure(function () {
+  var staticDir = path.resolve(__dirname, '../client');
+  console.log('Directory with static http content: ' + staticDir);
   app.use(
     "/", //the URL through which to access to static content
-    express.static('web/client') // location of static content
+    express.static(staticDir) // location of static content
   );
 });
 
@@ -102,7 +105,7 @@ app.get('/percountry', function(req, res) {
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     INNER JOIN items i ON i.item_code = p.item_code \
-    WHERE year=2011 AND p.country_code={countryid} AND value<>0 AND element_code=5510 \
+    WHERE year=2011 AND p.country_code={countryid} AND value<>0 AND element_code=5510 AND p.item_code < 1000 \
     ORDER BY value desc;".replace('{countryid}', req.query.countryid)
   getResult(req, res, sql)
 });

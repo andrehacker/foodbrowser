@@ -140,7 +140,7 @@ var StatsModule = (function() {
       datatable.addRows(data.length);
       for(var i=0; i<data.length; i++) {
         datatable.setCell(i, 0, data[i].name);
-        datatable.setCell(i, 1, parseFloat(data[i].summ), parseFloat(data[i].summ).toString());
+        datatable.setCell(i, 1, parseInt(data[i].summ), parseInt(data[i].summ).toString());
       }
       lastPerProductDataTable = datatable;
 
@@ -203,7 +203,7 @@ var StatsModule = (function() {
       datatable.addRows(data.length);
       for(var i=0; i<data.length; i++) {
         datatable.setCell(i, 0, data[i].name);
-        datatable.setCell(i, 1, parseFloat(data[i].production), parseFloat(data[i].production).toString());  // number and caption
+        datatable.setCell(i, 1, parseInt(data[i].production), parseInt(data[i].production).toString());  // number and caption
       }
       lastPerCountryDataTable = datatable;
 

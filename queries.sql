@@ -37,3 +37,4 @@ SELECT c.name, year, i.name, value
   INNER JOIN items i ON i.item_code = p.item_code
   WHERE year=2011 AND p.country_code=351 AND value<>0 AND element_code=5510
   ORDER BY value desc;
+# totals have item_code's > 1000
