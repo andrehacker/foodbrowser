@@ -11,6 +11,7 @@
 var express = require('express');
 var pg = require('pg');
 var path = require('path');
+var _ = require('underscore');
 
 // Create express server instance
 var app = express();
@@ -75,6 +76,14 @@ app.get('/types', function(req, res) {
 });
 
 /*
+ * Supported years
+ */
+app.get('/years', function(req, res) {
+  // 1961 - 2012
+  res.json(_.range(1961, 2013));
+});
+
+/*
  * 1 product, 1 type, N countries
  */
 // Add route using app.<http-method>(url, function)
@@ -105,8 +114,16 @@ app.get('/percountry', function(req, res) {
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     INNER JOIN items i ON i.item_code = p.item_code \
-    WHERE year=2011 AND p.country_code={countryid} AND value<>0 AND element_code=5510 AND p.item_code < 1000 \
-    ORDER BY value desc;".replace('{countryid}', req.query.countryid)
+    WHERE \
+      p.country_code={countryid} \
+      AND year={year} \
+      AND value<>0 \
+      AND element_code={typeid} \
+      AND p.item_code < 1000 \
+    ORDER BY value desc;"
+    .replace('{countryid}', req.query.countryid)
+    .replace('{typeid}', req.query.typeid)
+    .replace('{year}', req.query.year);
   getResult(req, res, sql)
 });
 
@@ -125,4 +142,5 @@ function getResult(req, res, sql) {
 
 app.listen(8888);
 
+//client.end();
 //connection.end();

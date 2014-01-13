@@ -4,6 +4,7 @@
     <link href="css/custom.css" rel="stylesheet">
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
+    <script type='text/javascript' src='js/underscore.js'></script>
     <script type='text/javascript' src='js/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/client.js'></script>
   </head>
@@ -36,28 +37,28 @@
 
     <div class="container">
       <div class="row"><div class="col-md-12">
-        <h2 id="product-header">Production per Product</h2>
+        <h2>Per Product</h2>
       </div></div>
       <div class="row">
         <div class="col-md-3" style="padding-bottom:10px;">
-          <select id="product-select" class="form-control" onchange="StatsModule.switchProduct(value);">
+          <select id="per_product_product_select" class="form-control" onchange="StatsModule.perProductSwitchProduct(value);">
             <option>Loading...</option>
           </select>
         </div>
         <div class="col-md-3" style="padding-bottom:10px;">
-          <select id="type-select" class="form-control" onchange="StatsModule.switchType(value);">
+          <select id="per_product_type_select" class="form-control" onchange="StatsModule.perProductSwitchType(value);">
             <option>Loading...</option>
           </select>
         </div>
         <div class="col-md-3" style="padding-bottom:10px;">
-          <select id="year-select" class="form-control" onchange="StatsModule.switchYear(value);">
-            <option>2011</option>
+          <select id="per_product_year_select" class="form-control" onchange="StatsModule.perProductSwitchYear(value);">
+            <option>Loading...</option>
           </select>
         </div>
       </div>
       <div class="row">
         <div class="col-md-9">
-          <div id="map_div" style="width: 100%"></div>
+          <div id="per_product_geochart_div" style="width: 100%"></div>
         </div>
         <div class="col-md-3">
           <div id="per_product_table_div" style="width: 100%"></div>
@@ -66,16 +67,29 @@
 
       <!-- PER COUNTRY -->
 
+      <div class="row"><div class="col-md-12">&nbsp;</div></div>
       <div class="row"><div class="col-md-12">
-        <h2 id="country-header">Production per Country</h2>
-      </div></div>
-      <div class="row"><div class="col-md-3" style="padding-bottom:10px;">
-        <select id="country-select" class="form-control" onchange="StatsModule.switchCountry(value);">
-          <option>Loading...</option>
-        </select>
+        <h2>Per Country</h2>
       </div></div>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3" style="padding-bottom:10px;">
+          <select id="per_country_country_select" class="form-control" onchange="StatsModule.perCountrySwitchCountry(value);">
+            <option>Loading...</option>
+          </select>
+        </div>
+        <div class="col-md-3" style="padding-bottom:10px;">
+          <select id="per_country_type_select" class="form-control" onchange="StatsModule.perCountrySwitchType(value);">
+            <option>Loading...</option>
+          </select>
+        </div>
+        <div class="col-md-3" style="padding-bottom:10px;">
+          <select id="per_country_year_select" class="form-control" onchange="StatsModule.perCountrySwitchYear(value);">
+            <option>Loading...</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-9">
           <div id="per_country_table_div" style="width: 100%"></div>
         </div>
       </div>
