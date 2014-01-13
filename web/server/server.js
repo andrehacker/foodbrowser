@@ -50,7 +50,7 @@ app.configure(function () {
  * Countries
  */
 app.get('/countries', function(req, res) {
-  var sql = "SELECT country_code, name as country_name \
+  var sql = "SELECT country_code, iso_code, name as country_name \
     FROM countries \
     WHERE \
       type=1"
@@ -89,7 +89,7 @@ app.get('/years', function(req, res) {
 // Add route using app.<http-method>(url, function)
 app.get('/perproduct', function(req, res) {
   console.log(req.query.q)
-  var sql = "SELECT min(c.name) AS name, sum(value) AS summ \
+  var sql = "SELECT min(c.name) AS name, min(iso_code) as iso_code, sum(value) AS summ \
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     WHERE \
@@ -110,7 +110,7 @@ app.get('/perproduct', function(req, res) {
  */
 app.get('/percountry', function(req, res) {
   console.log(req.query.q)
-  var sql = "SELECT c.name, year, i.name, value AS production \
+  var sql = "SELECT c.name, year, i.name, value AS value \
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     INNER JOIN items i ON i.item_code = p.item_code \
@@ -125,6 +125,48 @@ app.get('/percountry', function(req, res) {
     .replace('{typeid}', req.query.typeid)
     .replace('{year}', req.query.year);
   getResult(req, res, sql)
+});
+
+/*
+ * 1 country, 1 type, N products, N years
+ * http://www.localhost.com:8888/percountrytime?yearfrom=2010&yearto=2011&countryid=4&typeid=5510
+ */
+ app.get('/percountrytime', function(req, res) {
+  console.log(req.query.q)
+  var sql = "SELECT c.name, year, i.name, i.item_code, value AS value \
+    FROM production p \
+    INNER JOIN countries c ON c.country_code = p.country_code \
+    INNER JOIN items i ON i.item_code = p.item_code \
+    WHERE \
+      p.country_code={countryid} \
+      AND year>={yearfrom} AND year<={yearto} \
+      AND value<>0 \
+      AND element_code={typeid} \
+      AND p.item_code < 1000 \
+    ORDER BY c.country_code desc;"
+    .replace('{countryid}', req.query.countryid)
+    .replace('{typeid}', req.query.typeid)
+    .replace('{yearfrom}', req.query.yearfrom)
+    .replace('{yearto}', req.query.yearto);
+
+  client.query(sql, function(err, rows, fields) {
+    if (err) throw err;
+
+    // Postgre result is stored in .rows property.
+    // MySql result can be returned directly
+    var result = new Array();
+    var pos = -1;
+    var lastItemCode;
+    for (var i=0; i<rows.rows.length; i++) {
+      if (lastItemCode !== rows.rows[i].item_code) {
+        pos++;
+        lastItemCode = rows.rows[i].item_code;
+        result[pos] = {name: rows.rows[i].name, itemcode: rows.rows[i].item_code};
+      }
+      result[pos][rows.rows[i].year] = rows.rows[i].value;
+    }
+    res.json(result);
+  });
 });
 
 function getResult(req, res, sql) {

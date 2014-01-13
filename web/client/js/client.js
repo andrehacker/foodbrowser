@@ -1,6 +1,10 @@
 /*
  * All data are taken from FAOSTAT (faostat.fao.org), the Food and Agriculture Organization of the United Nations.
  * 
+ * D3 might be more flexible: 
+ * - http://bl.ocks.org/mbostock/4060606
+ * - http://bl.ocks.org/jasondavies/4188334
+ * 
  * Author: André Hacker
  */
 
@@ -26,6 +30,8 @@ var StatsModule = (function() {
   var INITIAL_PRODUCT_ID = 667;    // 667 = tea
   var INITIAL_COUNTRY_ID = 351;    // 351 = china
   var INITIAL_YEAR       = 2011;
+  var INITIAL_YEAR_FROM  = 2009;
+  var INITIAL_YEAR_TO    = 2011;
   var INITIAL_TYPE_ID    = 5510;   // 5510 = production
   var INITIAL_TYPE_DESCRIPTION = 'Production (tonnes)';
 
@@ -49,6 +55,17 @@ var StatsModule = (function() {
     typeDescription: INITIAL_TYPE_DESCRIPTION,
     // visualization objects
     tableChart: {}
+  };
+
+  var perCountryYearsState = {
+    // current filter
+    countryCode: INITIAL_COUNTRY_ID,
+    typeID: INITIAL_TYPE_ID,
+    yearfrom: INITIAL_YEAR_FROM,
+    yearto: INITIAL_YEAR_TO,
+    typeDescription: INITIAL_TYPE_DESCRIPTION,
+    // visualization objects
+    lineChart: {}
   };
 
   var allTypes;
@@ -213,7 +230,7 @@ var StatsModule = (function() {
       datatable.addRows(data.length);
       for(var i=0; i<data.length; i++) {
         datatable.setCell(i, 0, data[i].name);
-        datatable.setCell(i, 1, parseInt(data[i].production), parseInt(data[i].production).toString());  // number and caption
+        datatable.setCell(i, 1, parseInt(data[i].value), parseInt(data[i].value).toString());  // number and caption
       }
       perCountryState.tableChart.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:PER_COUNTRY_TABLE_SIZE});
     });
@@ -223,6 +240,33 @@ var StatsModule = (function() {
     title: 'Production',
     vAxis: {title: 'Production tonnes',  titleTextStyle: {color: 'red'}}
   };
+
+  var updatePerCountryYearsView = function() {
+
+    $.getJSON('/percountrytime?countryid=$country-id&typeid=${typeid}&yearfrom=${yearfrom}&yearto=${yearto}'
+      .replace('$country-id',perCountryYearsState.countryCode)
+      .replace('${typeid}',perCountryYearsState.typeID)
+      .replace('${yearfrom}',perCountryYearsState.yearfrom)
+      .replace('${yearto}',perCountryYearsState.yearto), function(data) {
+
+      var datatable = new google.visualization.DataTable();
+      var numRows = perCountryYearsState.yearto - perCountryYearsState.yearfrom + 1;
+      datatable.addColumn('date', 'Year');
+      datatable.addRows(numRows);
+      for (var i=0; i<numRows; i++) {
+        datatable.setCell(i, 0, new Date(perCountryYearsState.yearfrom + i,0,1));
+      }
+      for(var i=0; i<data.length; i++) {
+        if (i>=2) break;
+        datatable.addColumn('number', data[i].name);
+        _.each(_.range(perCountryYearsState.yearfrom, perCountryYearsState.yearto), function(year, index, list) {
+          // Add the value for this year
+          datatable.setCell(year - perCountryYearsState.yearfrom, i+1, parseInt(data[i][year]), parseInt(data[i][year]).toString());
+        })
+      }
+      perCountryYearsState.lineChart.draw(datatable, {});
+    });
+  }
 
 
   /*
@@ -241,6 +285,7 @@ var StatsModule = (function() {
 
       updatePerProductView();
       updatePerCountryView();
+      updatePerCountryYearsView();
       // 351 = china
       // 667 = tea
 
@@ -248,6 +293,7 @@ var StatsModule = (function() {
       google.visualization.events.addListener(perProductState.tableChart, 'select', perProductSelectHandler);
       perCountryState.tableChart = new google.visualization.Table(document.getElementById('per_country_table_div'));
       perProductState.geoChart = new google.visualization.GeoChart(document.getElementById('per_product_geochart_div'));
+      perCountryYearsState.lineChart = new google.visualization.LineChart(document.getElementById('per_country_linechart_div'));
     },
 
     perProductSwitchProduct: function perProductSwitchProduct(value) {

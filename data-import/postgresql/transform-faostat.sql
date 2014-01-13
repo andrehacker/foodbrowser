@@ -1,7 +1,12 @@
 
+-- Countries are based on M49 UN classification
+-- See http://unstats.un.org/unsd/methods/m49/m49alpha.htm
+-- Google expects ISO 3166-1
+
 -- ----- CREATE DIMENSION TABLES -----
 
 -- Extract countries
+-- DON'T TAKE THIS, USE THE countries.sql INSTEAD!
 DROP TABLE IF EXISTS countries;
 CREATE TABLE countries AS SELECT CAST(country_code AS INTEGER) as code, country AS name FROM production_raw GROUP BY country_code, country;
 ALTER TABLE countries ALTER COLUMN code TYPE INTEGER;
