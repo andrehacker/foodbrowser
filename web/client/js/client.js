@@ -4,6 +4,12 @@
  * D3 might be more flexible: 
  * - http://bl.ocks.org/mbostock/4060606
  * - http://bl.ocks.org/jasondavies/4188334
+ *
+ * FaoData has a REST API, which is however not used in new interface
+ * - http://data.fao.org/
+ * - http://api.data.fao.org/1.0/
+ * - http://faodata.blogspot.de/2011/12/data.html
+ * - http://www.programmableweb.com/api/faodata
  * 
  * Author: André Hacker
  */
@@ -30,7 +36,7 @@ var StatsModule = (function() {
   var INITIAL_PRODUCT_ID = 667;    // 667 = tea
   var INITIAL_COUNTRY_ID = 351;    // 351 = china
   var INITIAL_YEAR       = 2011;
-  var INITIAL_YEAR_FROM  = 2009;
+  var INITIAL_YEAR_FROM  = 2000;
   var INITIAL_YEAR_TO    = 2011;
   var INITIAL_TYPE_ID    = 5510;   // 5510 = production
   var INITIAL_TYPE_DESCRIPTION = 'Production (tonnes)';
@@ -54,16 +60,18 @@ var StatsModule = (function() {
     year: INITIAL_YEAR,
     typeDescription: INITIAL_TYPE_DESCRIPTION,
     // visualization objects
-    tableChart: {}
+    tableChart: {},
+    lastDataTable: {}
   };
 
-  var perCountryYearsState = {
+  var perCountryTimeState = {
     // current filter
-    countryCode: INITIAL_COUNTRY_ID,
-    typeID: INITIAL_TYPE_ID,
+    //countryCode: INITIAL_COUNTRY_ID,
+    //typeID: INITIAL_TYPE_ID,
+    //typeDescription: INITIAL_TYPE_DESCRIPTION,
     yearfrom: INITIAL_YEAR_FROM,
     yearto: INITIAL_YEAR_TO,
-    typeDescription: INITIAL_TYPE_DESCRIPTION,
+    products: undefined,
     // visualization objects
     lineChart: {}
   };
@@ -118,6 +126,8 @@ var StatsModule = (function() {
       });
       populateYears('#per_product_year_select', perProductState.year, data);
       populateYears('#per_country_year_select', perCountryState.year, data);
+      populateYears('#per_country_yearfrom_select', perCountryTimeState.yearfrom, data);
+      populateYears('#per_country_yearto_select', perCountryTimeState.yearto, data);
     });
   }
 
@@ -189,11 +199,10 @@ var StatsModule = (function() {
     // Show selection in geo chart. Does not work as desired.
     
     // Trick from http://stackoverflow.com/questions/18321025/google-charts-api-set-selection-choose-series-to-highlight
-    var enabledTrick = true;
-    if (enabledTrick) {
+    var enableTrick = true;
+    if (enableTrick) {
       var selection = perProductState.tableChart.getSelection();
       perProductState.geoChart.setSelection(selection);
-      var selection = perProductState.tableChart.getSelection();
       if (selection.length > 0) {
         var view = new google.visualization.DataView(perProductState.lastDataTable);
         view.setColumns([0, {
@@ -231,7 +240,9 @@ var StatsModule = (function() {
       for(var i=0; i<data.length; i++) {
         datatable.setCell(i, 0, data[i].name);
         datatable.setCell(i, 1, parseInt(data[i].value), parseInt(data[i].value).toString());  // number and caption
+        datatable.setRowProperty(i, 'product_code', data[i].product_code)
       }
+      perCountryState.lastDataTable = datatable;
       perCountryState.tableChart.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:PER_COUNTRY_TABLE_SIZE});
     });
   }
@@ -241,32 +252,50 @@ var StatsModule = (function() {
     vAxis: {title: 'Production tonnes',  titleTextStyle: {color: 'red'}}
   };
 
-  var updatePerCountryYearsView = function() {
+  var updatePerCountryTimeView = function() {
 
-    $.getJSON('/percountrytime?countryid=$country-id&typeid=${typeid}&yearfrom=${yearfrom}&yearto=${yearto}'
-      .replace('$country-id',perCountryYearsState.countryCode)
-      .replace('${typeid}',perCountryYearsState.typeID)
-      .replace('${yearfrom}',perCountryYearsState.yearfrom)
-      .replace('${yearto}',perCountryYearsState.yearto), function(data) {
+    if (_.isUndefined(perCountryTimeState.products)) return;
+    $.getJSON('/percountrytime?countryid=$country-id&products=${products}&typeid=${typeid}&yearfrom=${yearfrom}&yearto=${yearto}'
+      .replace('$country-id',perCountryState.countryCode)
+      .replace('${typeid}',perCountryState.typeID)
+      .replace('${yearfrom}',perCountryTimeState.yearfrom)
+      .replace('${yearto}',perCountryTimeState.yearto)
+      .replace('${products}',perCountryTimeState.products), function(data) {
 
       var datatable = new google.visualization.DataTable();
-      var numRows = perCountryYearsState.yearto - perCountryYearsState.yearfrom + 1;
-      datatable.addColumn('date', 'Year');
+      var numRows = perCountryTimeState.yearto - perCountryTimeState.yearfrom + 1;
+      datatable.addColumn('string', 'Year');
       datatable.addRows(numRows);
       for (var i=0; i<numRows; i++) {
-        datatable.setCell(i, 0, new Date(perCountryYearsState.yearfrom + i,0,1));
+        datatable.setCell(i, 0, (perCountryTimeState.yearfrom + i).toString());
       }
+
       for(var i=0; i<data.length; i++) {
-        if (i>=2) break;
         datatable.addColumn('number', data[i].name);
-        _.each(_.range(perCountryYearsState.yearfrom, perCountryYearsState.yearto), function(year, index, list) {
+        _.each(_.range(perCountryTimeState.yearfrom, perCountryTimeState.yearto+1), function(year, index, list) {
           // Add the value for this year
-          datatable.setCell(year - perCountryYearsState.yearfrom, i+1, parseInt(data[i][year]), parseInt(data[i][year]).toString());
+          datatable.setCell(year - perCountryTimeState.yearfrom, i+1, parseInt(data[i][year]), parseInt(data[i][year]).toString());
         })
       }
-      perCountryYearsState.lineChart.draw(datatable, {});
+      perCountryTimeState.lineChart.draw(datatable, {});
     });
   }
+
+  var perCountrySelectHandler = function() {
+
+    // Show selected products in time series chart
+    
+    var selection = perCountryState.tableChart.getSelection();
+    if (selection.length > 0) {
+      perCountryTimeState.products = _.map(selection, function(obj){
+        return perCountryState.lastDataTable.getRowProperty(obj.row,'product_code')
+      });
+      updatePerCountryTimeView();
+    } else {
+      // Show default, or empty?
+    }
+  }
+
 
 
   /*
@@ -285,15 +314,17 @@ var StatsModule = (function() {
 
       updatePerProductView();
       updatePerCountryView();
-      updatePerCountryYearsView();
+      updatePerCountryTimeView();
       // 351 = china
       // 667 = tea
 
       perProductState.tableChart = new google.visualization.Table(document.getElementById('per_product_table_div'));
-      google.visualization.events.addListener(perProductState.tableChart, 'select', perProductSelectHandler);
-      perCountryState.tableChart = new google.visualization.Table(document.getElementById('per_country_table_div'));
       perProductState.geoChart = new google.visualization.GeoChart(document.getElementById('per_product_geochart_div'));
-      perCountryYearsState.lineChart = new google.visualization.LineChart(document.getElementById('per_country_linechart_div'));
+      perCountryState.tableChart = new google.visualization.Table(document.getElementById('per_country_table_div'));
+      perCountryTimeState.lineChart = new google.visualization.LineChart(document.getElementById('per_country_linechart_div'));
+
+      google.visualization.events.addListener(perProductState.tableChart, 'select', perProductSelectHandler);
+      google.visualization.events.addListener(perCountryState.tableChart, 'select', perCountrySelectHandler);
     },
 
     perProductSwitchProduct: function perProductSwitchProduct(value) {
@@ -333,6 +364,16 @@ var StatsModule = (function() {
       perCountryState.year = value;
       updatePerCountryView();
     },
+
+    perCountrySwitchYearFrom: function perProductSwitchYear(value) {
+      perCountryTimeState.yearfrom = parseInt(value);
+      updatePerCountryTimeView();
+    },
+
+    perCountrySwitchYearTo: function perProductSwitchYear(value) {
+      perCountryTimeState.yearto = parseInt(value);
+      updatePerCountryTimeView();
+    }
   }
 
 })();

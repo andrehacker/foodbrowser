@@ -110,7 +110,7 @@ app.get('/perproduct', function(req, res) {
  */
 app.get('/percountry', function(req, res) {
   console.log(req.query.q)
-  var sql = "SELECT c.name, year, i.name, value AS value \
+  var sql = "SELECT c.name, year, i.name, i.item_code as product_code, value AS value \
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
     INNER JOIN items i ON i.item_code = p.item_code \
@@ -132,7 +132,8 @@ app.get('/percountry', function(req, res) {
  * http://www.localhost.com:8888/percountrytime?yearfrom=2010&yearto=2011&countryid=4&typeid=5510
  */
  app.get('/percountrytime', function(req, res) {
-  console.log(req.query.q)
+  console.log(req.query)
+  if (_.isUndefined(req.query.products)) {res.json({}); return;};
   var sql = "SELECT c.name, year, i.name, i.item_code, value AS value \
     FROM production p \
     INNER JOIN countries c ON c.country_code = p.country_code \
@@ -143,17 +144,18 @@ app.get('/percountry', function(req, res) {
       AND value<>0 \
       AND element_code={typeid} \
       AND p.item_code < 1000 \
+      AND i.item_code IN ({products}) \
     ORDER BY c.country_code desc;"
     .replace('{countryid}', req.query.countryid)
     .replace('{typeid}', req.query.typeid)
     .replace('{yearfrom}', req.query.yearfrom)
-    .replace('{yearto}', req.query.yearto);
+    .replace('{yearto}', req.query.yearto)
+    .replace('{products}', req.query.products);
+  console.log(sql)
 
   client.query(sql, function(err, rows, fields) {
     if (err) throw err;
 
-    // Postgre result is stored in .rows property.
-    // MySql result can be returned directly
     var result = new Array();
     var pos = -1;
     var lastItemCode;
