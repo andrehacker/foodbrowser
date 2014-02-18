@@ -85,6 +85,7 @@ app.get('/years', function(req, res) {
 
 /*
  * 1 product, 1 type, N countries
+ * http://localhost:8888/perproduct?productid=667&typeid=5510&year=2011
  */
 // Add route using app.<http-method>(url, function)
 app.get('/perproduct', function(req, res) {
@@ -107,6 +108,7 @@ app.get('/perproduct', function(req, res) {
 
 /*
  * 1 country, 1 type, N products
+ * http://localhost:8888/percountry?countryid=351&typeid=5510&year=2011
  */
 app.get('/percountry', function(req, res) {
   console.log(req.query.q)
@@ -129,7 +131,7 @@ app.get('/percountry', function(req, res) {
 
 /*
  * 1 country, 1 type, N products, N years
- * http://www.localhost.com:8888/percountrytime?yearfrom=2010&yearto=2011&countryid=4&typeid=5510
+ * http://localhost:8888/percountrytime?yearfrom=2010&yearto=2011&countryid=351&typeid=5510&products=667,656
  */
  app.get('/percountrytime', function(req, res) {
   console.log(req.query)
