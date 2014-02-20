@@ -1,34 +1,39 @@
-<web-app version="3.0"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
-         metadata-complete="true">
-
- <display-name>Java EE 6 Starter Application</display-name>
-
-  <context-param>
-	<param-name>contextConfigLocation</param-name>
-	<param-value>classpath:/META-INF/spring/applicationContext.xml,
-				classpath:/META-INF/spring/infrastructure.xml</param-value>
-  </context-param>
-
-  <listener>
-	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ 
   <servlet>
-	<servlet-name>jboss-as-kitchensink</servlet-name>
-	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-	<init-param>
-	  <param-name>contextConfigLocation</param-name>
-	  <param-value>/WEB-INF/jboss-as-spring-mvc-context.xml</param-value>
-	</init-param>
-	<load-on-startup>1</load-on-startup>
+    <!-- For XML config: Spring will by default load "<name>-servlet.xml" from your webapps WEB-INF folder -->
+    <servlet-name>food</servlet-name>
+    
+    <!--  -->
+    <servlet-class>
+        org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+    
+    <!-- Spring specific init-params. init-param is a servlet-feature.  -->
+    <!-- ContextLoader will look for contextClass property -->
+    <init-param>
+      <param-name>contextClass</param-name>
+      <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </init-param>
+    
+    <!-- Tells the DispatcherServlet to look for Java based Spring configuration in this package -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>de.andrehacker.food.springconfig</param-value>
+    </init-param>
   </servlet>
-
+ 
+ <!-- This is standard Java EE Servlet configuration, nothing Spring specific here -->
   <servlet-mapping>
-	<servlet-name>jboss-as-kitchensink</servlet-name>
-	<url-pattern>/</url-pattern>
+  
+    <!-- Name refers to the servlet defined above -->
+    <servlet-name>food</servlet-name>
+    
+    <!-- Maps everything! -->
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
+ 
 </web-app>
