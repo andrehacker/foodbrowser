@@ -16,6 +16,7 @@
 	</properties>
 
 	<dependencies>
+	<!-- 
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
 			<artifactId>jboss-javaee-web-6.0</artifactId>
@@ -23,14 +24,17 @@
 			<type>pom</type>
 			<scope>import</scope>
 		</dependency>
+		 -->
 		<!-- Required by jboss-javaee-6.0:3.0.2.Final (https://issues.jboss.org/browse/JBBUILD-708 
 			and http://stackoverflow.com/questions/16300544/cannot-use-dependency-jboss-javaee-6-0-in-my-maven-project) -->
+			<!-- 
 		<dependency>
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<version>2.7.1</version>
 			<scope>provided</scope>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -117,6 +121,7 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.1.14.v20131031</version>
 			</plugin>
+			<!-- Deployment on openshift worked only with version 1.6 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
