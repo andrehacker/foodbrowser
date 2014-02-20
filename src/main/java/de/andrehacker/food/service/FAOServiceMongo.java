@@ -29,8 +29,8 @@ public class FAOServiceMongo implements FAOService {
    * mock. We can't, however, inject our own implementation, because MongoClient
    * is not an interface.
    */
-  public FAOServiceMongo(MongoClient mongoClient) {
-    this.db = mongoClient.getDB("food");
+  public FAOServiceMongo(DB db) {
+    this.db = db;
   }
 
   @Override

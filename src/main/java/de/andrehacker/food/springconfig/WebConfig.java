@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 import de.andrehacker.food.service.FAOServiceMongo;
@@ -36,6 +37,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   
   private static final String MONGO_HOST = "localhost";
   private static final int MONGO_PORT = 27017;
+  private static final String MONGO_DB_NAME = "foodbrowser";
+  private static final boolean MONGO_AUTH_REQUIRED = true;
+  private static final String MONGO_USER = "admin";
+  private static final String MONGO_PASS = "3CBVH8Q_6mE7";
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -80,7 +85,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   }
   
   @Bean
-  public MongoClient mongoClient() throws UnknownHostException {
-    return new MongoClient(MONGO_HOST, MONGO_PORT);
+  public DB mongoClient() throws UnknownHostException {
+    DB db = new MongoClient(MONGO_HOST, MONGO_PORT).getDB(MONGO_DB_NAME);
+    if (MONGO_AUTH_REQUIRED) {
+      db.authenticate(MONGO_USER, MONGO_PASS.toCharArray());
+    }
+    return db;
   }
 }
