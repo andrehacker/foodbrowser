@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.andrehacker</groupId>
-	<artifactId>rest</artifactId>
+	<artifactId>foodbrowser</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<name>Food Browser</name>
 
