@@ -37,8 +37,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   
   private static final String MONGO_HOST = "localhost";
   private static final int MONGO_PORT = 27017;
-  private static final String MONGO_DB_NAME = "foodbrowser";
-  private static final boolean MONGO_AUTH_REQUIRED = true;
+  private static final String MONGO_DB_NAME = "food";
+  private static final boolean MONGO_AUTH_REQUIRED = false;
   private static final String MONGO_USER = "admin";
   private static final String MONGO_PASS = "3CBVH8Q_6mE7";
 
@@ -81,11 +81,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
    */
   @Bean
   public FAOServiceMongo faoServiceMongo() throws UnknownHostException {
-    return new FAOServiceMongo(mongoClient());
+    return new FAOServiceMongo(mongoDB());
   }
   
   @Bean
-  public DB mongoClient() throws UnknownHostException {
+  public DB mongoDB() throws UnknownHostException {
     DB db = new MongoClient(MONGO_HOST, MONGO_PORT).getDB(MONGO_DB_NAME);
     if (MONGO_AUTH_REQUIRED) {
       db.authenticate(MONGO_USER, MONGO_PASS.toCharArray());
