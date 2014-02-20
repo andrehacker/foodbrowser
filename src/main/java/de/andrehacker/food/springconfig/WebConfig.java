@@ -35,9 +35,9 @@ import de.andrehacker.food.service.FAOServiceMongo;
 @ComponentScan(basePackages = "de.andrehacker.food")
 public class WebConfig extends WebMvcConfigurerAdapter {
   
-  private static final String MONGO_HOST = "localhost";
+  private static final String MONGO_HOST = "127.10.126.130";
   private static final int MONGO_PORT = 27017;
-  private static final String MONGO_DB_NAME = "food";
+  private static final String MONGO_DB_NAME = "foodbrowser";
   private static final boolean MONGO_AUTH_REQUIRED = false;
   private static final String MONGO_USER = "admin";
   private static final String MONGO_PASS = "3CBVH8Q_6mE7";
