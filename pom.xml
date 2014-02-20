@@ -3,18 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>de.andrehacker</groupId>
 	<artifactId>rest</artifactId>
 	<version>0.1-SNAPSHOT</version>
-  <name>Food Browser</name>
-	
+	<name>Food Browser</name>
+
 	<packaging>war</packaging>
-	
+
 	<properties>
-	   <version.jboss.as.maven.plugin>7.1.1.Final</version.jboss.as.maven.plugin>
+		<version.jboss.as.maven.plugin>7.1.1.Final</version.jboss.as.maven.plugin>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
@@ -22,6 +22,14 @@
 			<version>3.0.0.Final</version>
 			<type>pom</type>
 			<scope>import</scope>
+		</dependency>
+		<!-- Required by jboss-javaee-6.0:3.0.2.Final (https://issues.jboss.org/browse/JBBUILD-708 
+			and http://stackoverflow.com/questions/16300544/cannot-use-dependency-jboss-javaee-6-0-in-my-maven-project) -->
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>2.7.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
