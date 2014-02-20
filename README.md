@@ -5,17 +5,16 @@ A dynamic webapp visualizing statistics about things you eat and drink (currentl
 
 Includes
 * Two backend implementations
-    * A Java/Spring/MongoDB backend (other repo)
-    * Node.js server offering an REST API for the data, using relational db.
+    * A Java/Spring/MongoDB REST/Json backend (other repo)
+    * Node.js server offering an REST/Json API, using a relational db.
 * ETL scripts to load data from FAOSTAT csv into database (postgres or mysql)
 * Static web pages for visualization, using jQuery, Twitter Bootstrap and Google charts.
-* Hosting will be done using heroku, openshift, or any other one (in progress).
 
 ## MongoDB schema
-* I use a normalized schema to keep 
+I use a normalized schema. The client (JavaScript) holds all values for the dimension-tables (countries, items, measures) in memory and can resolve the IDs without any additional query.
 
 ## Openshift
-* I use PaaS openshift to host my application. There is free support for MongoDB (500MB), Java and JBoss Enterprise Application Platform 6.
+The app is hosted via PaaS provider [openshift](http://openshift.com/). I use PaaS openshift to host my application. There is free support for MongoDB, Java and JBoss Enterprise Application Platform 6. Due to the size restrictions I uploaded data for one measure only (production).
 
 
 <!--
