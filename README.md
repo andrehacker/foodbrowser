@@ -1,17 +1,22 @@
-## Tea and Food Stats
-A dynamic page visualizing stats about tea and other products.
+## Food Browser
+A dynamic webapp visualizing statistics about things you eat and drink (currently only crops). All statistics are extracted from [FAOSTAT](http://faostat.fao.org/) (UN department).
+
+[LIVE DEMO](foodbrowser-andrehacker.rhcloud.com)
 
 Includes
-- ETL scripts to load data from FAOSTAT csv into database
-- Nodejs server offering an REST API for the data
-- Static web pages for visualization, using jQuery, Twitter Bootstrap and Google charts.
+* Two backend implementations
+    * A Java/Spring/MongoDB backend (other repo)
+    * Node.js server offering an REST API for the data, using relational db.
+* ETL scripts to load data from FAOSTAT csv into database (postgres or mysql)
+* Static web pages for visualization, using jQuery, Twitter Bootstrap and Google charts.
+* Hosting will be done using heroku, openshift, or any other one (in progress).
 
-## TODO
-- host on heroku (migrate to )
-- use correct nation codes
-- highlight the country which is selected in list.
-- Add game: Which country produces/imports/exports most tea/coffee/...
-- ...
+## MongoDB schema
+* I use a normalized schema to keep 
+
+## Openshift
+* I use PaaS openshift to host my application. There is free support for MongoDB (500MB), Java and JBoss Enterprise Application Platform 6.
+
 
 <!--
 Postgres Import
