@@ -11,7 +11,7 @@ Includes
 * Static web pages for visualization, using jQuery, Twitter Bootstrap and Google charts.
 
 ## MongoDB schema
-I use a normalized schema. The client (JavaScript) holds all values for the dimension-tables (countries, items, measures) in memory and can resolve the IDs without any additional query.
+I use a normalized star schema with one fact table and three dimension tables (countries, items, measures). The client (JavaScript) holds all values for the dimension-tables in memory and can resolve the IDs without any additional query. A denormalized (embedded) model would not have any advantages for this use case.
 
 ## Openshift
 The app is hosted via PaaS provider [openshift](http://openshift.com/). I use PaaS openshift to host my application. There is free support for MongoDB, Java and JBoss Enterprise Application Platform 6. Due to the size restrictions I uploaded data for one measure only (production).
