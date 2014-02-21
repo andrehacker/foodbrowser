@@ -1,3 +1,7 @@
+target
+.classpath
+.project
+.settings
+
 tea-datasets
 node_modules
-target
