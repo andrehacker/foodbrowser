@@ -37,7 +37,7 @@
 
     <div class="container">
       <div class="row"><div class="col-md-12">
-        <h2>Per Product</h2>
+        <h2>Browse By Product</h2>
       </div></div>
       <div class="row">
         <div class="col-md-3" style="padding-bottom:10px;">
@@ -69,7 +69,7 @@
 
       <div class="row"><div class="col-md-12">&nbsp;</div></div>
       <div class="row"><div class="col-md-12">
-        <h2>Per Country</h2>
+        <h2>Browse By Country</h2>
       </div></div>
       <div class="row">
         <div class="col-md-3" style="padding-bottom:10px;">
@@ -117,7 +117,7 @@
 
       <h1 id="about">About</h1>
       All data are extracted from <a href="http://faostat.fao.org/">FAOSTAT</a>, the Food and Agriculture Organization of the United Nations.<br/>
-      This website was developed by Andr&eacute; Hacker, andrephacker@gmail.com. Sources are on <a href="https://github.com/andrehacker/tea">github</a>.Ideas or contributors are always welcome!<br/>
+      This website was developed by Andr&eacute; Hacker (<a href="http://andrehacker.de">andrehacker.de</a>). Sources are on <a href="https://github.com/andrehacker/tea">github</a>. Ideas or contributors are always welcome!<br/>
     </div>
   </body>
 </html>
