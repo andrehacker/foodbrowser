@@ -1,10 +1,9 @@
-
 ## Food Browser ([LIVE DEMO](http://foodbrowser-andrehacker.rhcloud.com))
 A dynamic webapp visualizing statistics about things you eat and drink (currently only crops). All statistics are extracted from [FAOSTAT](http://faostat.fao.org/) (UN department).
 
 Includes
 * Two backend implementations
-    * A Java/Spring/MongoDB REST/Json backend (other repo)
+    * A Java/Spring/MongoDB REST/Json backend
     * Node.js server offering an REST/Json API, using a relational db.
 * ETL scripts to load data from FAOSTAT csv into database (postgres or mysql)
 * Static web pages for visualization, using jQuery, Twitter Bootstrap and Google charts.
