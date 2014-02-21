@@ -4,7 +4,6 @@ TODO
     * Use real iso in chart (add new column)
     * Remove redundant data, check meaning of flags
 * Improve time series view
-* Publish on github
 * Features:
     * Add time series view to compare countries for one product
     * Add trading data (import export)
