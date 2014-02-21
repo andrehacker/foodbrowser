@@ -1,4 +1,4 @@
-## Food Browser ([LIVE DEMO](http://foodbrowser-andrehacker.rhcloud.com))
+## Food Browser ([Live Demo](http://foodbrowser-andrehacker.rhcloud.com))
 A dynamic webapp visualizing statistics about things you eat and drink (currently only crops). All statistics are extracted from [FAOSTAT](http://faostat.fao.org/) (UN department).
 
 Includes
