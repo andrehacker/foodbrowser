@@ -244,6 +244,10 @@ var StatsModule = (function() {
       }
       perCountryState.lastDataTable = datatable;
       perCountryState.tableChart.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:PER_COUNTRY_TABLE_SIZE});
+
+      // Select first entry, will cause the time series view to be updated
+      perCountryState.tableChart.setSelection([{row:0}]);
+      perCountrySelectHandler();
     });
   }
 
@@ -277,7 +281,7 @@ var StatsModule = (function() {
           datatable.setCell(year - perCountryTimeState.yearfrom, i+1, parseInt(data[i][year]), parseInt(data[i][year]).toString());
         })
       }
-      perCountryTimeState.lineChart.draw(datatable, {});
+      perCountryTimeState.lineChart.draw(datatable, {height: 300, chartArea:{left:"auto",top:20,width:"80%",height:"80%"}});
     });
   }
 

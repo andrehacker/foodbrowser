@@ -182,11 +182,16 @@ var StatsModule = (function() {
    */
 
   var updatePerItemView = function() {
+    // TODO: Move this into the handler, but be careful not to run the query multiple times
+    if (_.isUndefined(allCountries)) {
+      // Probably the page was just loaded and the countries were not received yet.
+      setTimeout(updatePerItemView, 250);
+      return;
+    }
     $.getJSON('/peritem?itemid=${item-id}&measureid=${measure-id}&year=${year}'
       .replace('${item-id}',perItemState.itemID)
       .replace('${measure-id}',perItemState.measureID)
       .replace('${year}',perItemState.year), function(data) {
-  //    alert(JSON.stringify(data))
 
       var datatable = new google.visualization.DataTable();
       datatable.addColumn('string', 'Country');
@@ -250,6 +255,12 @@ var StatsModule = (function() {
 
   var updatePerCountryView = function() {
 
+    // TODO: Move this into the handler, but be careful not to run the query multiple times
+    if (_.isUndefined(allItems)) {
+      // Probably the page was just loaded and the items were not received yet.
+      setTimeout(updatePerCountryView, 250);
+      return;
+    }
     $.getJSON('/percountry?countryid=${country-id}&measureid=${measure-id}&year=${year}'
       .replace('${country-id}',perCountryState.countryID)
       .replace('${measure-id}',perCountryState.measureID)
@@ -268,6 +279,10 @@ var StatsModule = (function() {
       });
       perCountryState.lastDataTable = datatable;
       perCountryState.tableChart.draw(datatable, {showRowNumber: true, page: 'enable', pageSize: PER_COUNTRY_TABLE_SIZE});
+
+      // Select first entry, will cause the time series view to be updated
+      perCountryState.tableChart.setSelection([{row:0}]);
+      perCountrySelectHandler();
     });
   }
 
@@ -304,7 +319,7 @@ var StatsModule = (function() {
           }
         })
       });
-      perCountryTimeState.lineChart.draw(datatable, {});
+      perCountryTimeState.lineChart.draw(datatable, {height: 300, chartArea:{left:"auto",top:20,width:"80%",height:"80%"}});
     });
   }
 
