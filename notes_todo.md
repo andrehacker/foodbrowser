@@ -1,4 +1,5 @@
 TODO
+* Bug: Check for empty list when selecting first
 * Data cleansing:
     * Clean countries: Add ISO3, remove countries without iso3 code.
     * Use real iso in chart (add new column)
