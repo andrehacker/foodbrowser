@@ -19,7 +19,7 @@ public class FAOServiceMongoTest {
   /*
    * I must use DI to get an instance of this. Creating it manually causes that
    * the IoC does NOT create the AutoWired instances used within the service
-   * (e.g. RestTemplate)
+   * (e.g. RestTemplate)s
    */
   @Autowired
   FAOServiceMongo service;

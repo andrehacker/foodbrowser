@@ -25,8 +25,7 @@ public class FAOServiceMongo implements FAOService {
   /**
    * Use constructor-based injection. Allows us to inject specific instances of
    * the client, e.g. for testing we could connect to a test db, or we inject a
-   * mock. We can't, however, inject our own implementation, because MongoClient
-   * is not an interface.
+   * mock.
    */
   public FAOServiceMongo(DB db) {
     this.db = db;

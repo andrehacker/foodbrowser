@@ -51,6 +51,7 @@ public class FAOServiceByAPITest {
     System.out.println("Result: " + json);
   }
 
+  @Ignore
   @Test
   public void testPerCountry() {
     String json = service.getPerCountry(351, 5510, 2011);
