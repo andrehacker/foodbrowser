@@ -1,5 +1,8 @@
 TODO
 * Bug: Check for empty list when selecting first
+* Bug: Check valid time range
+* Bug: Sorting in year-picker wrong in Chrome
+* Improve intuitivity of time series. Add wizard.
 * Data cleansing:
     * Clean countries: Add ISO3, remove countries without iso3 code.
     * Use real iso in chart (add new column)
@@ -11,6 +14,7 @@ TODO
     * Add trading data (import export)
     * Add data for meat, etc.
     * Add game (multiple choice): Which country produces/imports/exports most tea/coffee/...
-    * highlight the country which is selected in list.
+    * Highlight the country which is selected in list.
     * Add "interesting facts"
 * ...
+
