@@ -25,13 +25,27 @@ __Redundant Data:__
 "41","China, mainland","656","Coffee, green","31","5312","Area Harvested","2011","Ha","29550.000",""
 "41","China, mainland","656","Coffee, green","31","5312","Area Harvested","2011","Ha","29550.000",""
 
-Unique 2.327.806
-sort ~/dev/tea/tea-datasets/faostat/Production_Crops_E_All_Data.csv | uniq --count | wc -l
-Redundant: 19.154
-sort ~/dev/tea/tea-datasets/faostat/Production_Crops_E_All_Data.csv | uniq --count | grep -e "^\s*2" | wc -l
-Test:
-sort ~/dev/tea/tea-datasets/faostat/Production_Crops_E_All_Data.csv | uniq --count | grep -e "^\s*2" | grep -e "China.*656.*29550"
+All China mainland data (country_id 41) are redundant.
 
+Unique 2.327.806
+sort ~/dev/foodbrowser/tea-datasets/faostat/Production_Crops_E_All_Data.csv | uniq --count | wc -l
+Redundant: 19.154
+sort ~/dev/foodbrowser/tea-datasets/faostat/Production_Crops_E_All_Data.csv | uniq --count | grep -e "^\s*2" > redundant
+Test:
+sort ~/dev/foodbrowser/tea-datasets/faostat/Production_Crops_E_All_Data.csv | uniq --count | grep -e "^\s*2" | grep -e "China.*656.*29550"
+
+Remove redundant data: 
+```
+db.facts.find({country_id: 41}).count() = 38308 = 19154 * 2
+var res = db.facts.aggregate(
+    { $match : { country_id : 41 } },
+    { $group : { _id : {item_id: "$item_id", measure_id:"$measure_id", year: "$year", country_id: "$country_id"}, fact_count: { $sum : 1 } } } );
+res.result.length
+res.result.forEach(function(obj){ db.facts.remove( {item_id: obj._id.item_id, measure_id:obj._id.measure_id, year: obj._id.year, country_id: obj._id.country_id} , true) });
+```
+
+Count afterwards = 2327805
+Redundant count openshift: 6290. New count 733767 (= 740.057 - 6290)
 
 ## MongoDB Queries
 ```

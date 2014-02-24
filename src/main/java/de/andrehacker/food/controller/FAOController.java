@@ -66,7 +66,7 @@ public class FAOController {
   }
 
   /*
-   * http://localhost:8080/stats/peritem?itemid=123&measureid=2&year=2011
+   * http://localhost:8080/peritem?itemid=123&measureid=2&year=2011
    */
 	@RequestMapping("peritem")
 	@ResponseBody

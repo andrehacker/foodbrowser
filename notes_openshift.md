@@ -46,7 +46,6 @@ db.facts.find({measure_id:5510}).forEach(function(doc){
 });
 mongoexport -d food -c facts_small -o /home/andre/dev/csv-export/facts-small-export.json
 
-
 ## MongoDB config
 * need --authenticationDatabase admin (if not added user)
 db.addUser( { user: "admin", pwd: "3CBVH8Q_6mE7", roles: [ "readWrite" ] } )

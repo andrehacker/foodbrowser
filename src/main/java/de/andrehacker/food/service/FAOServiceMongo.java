@@ -36,6 +36,7 @@ public class FAOServiceMongo implements FAOService {
     DBCollection items = db.getCollection("items");
     DBCursor cursor = items.find();
     return JSON.serialize(cursor);
+//    return "{result: " + JSON.serialize(cursor) + "}";
   }
 
   @Override
