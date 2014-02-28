@@ -5,7 +5,7 @@ Includes
 * Two backend implementations
     * A Java/Spring/MongoDB REST/Json backend
     * Node.js server offering an REST/Json API, using a relational db.
-* ETL scripts to load data from FAOSTAT csv into database (postgres or mysql)
+* ETL scripts to load data from FAOSTAT csv into database (postgres or mysql) and into MongoDB
 * Static web pages for visualization, using jQuery, Twitter Bootstrap and Google charts.
 
 ## MongoDB schema
