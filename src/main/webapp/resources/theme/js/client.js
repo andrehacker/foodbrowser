@@ -140,9 +140,8 @@ var StatsModule = (function() {
 
   var getAllYears = function() {
     $.getJSON('/years', function(data) {
-      data.sort(function(a, b) { 
-        return a < b;
-      });
+      data.reverse();
+      alert(data)
       populateYears('#per_item_year_select', perItemState.year, data);
       populateYears('#per_country_year_select', perCountryState.year, data);
       populateYears('#per_country_yearfrom_select', perCountryTimeState.yearfrom, data);

@@ -2,9 +2,6 @@ package de.andrehacker.food.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * For custom json google "spring mvc custom json"
- */
 public class Product {
   
   @JsonProperty("product_name")

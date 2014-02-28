@@ -46,8 +46,7 @@ public class FAOServiceByAPI implements FAOService {
     // http://data.fao.org/developers/api/v1/en/resources/faostat/crop-prod/item/members.json?page=1&pageSize=10&fields=mnemonic%2Clabel%40en%2Cproperties.label&sort=label%40en
 //    String countries = restTemplate.getForObject(faoUrl, String.class);
 //    String result = FAOJsonHelper.convertJSON(countries);
-    String result = FAOServiceConstants.items;
-    return result;
+    return null;
   }
   
   @Override
@@ -56,17 +55,17 @@ public class FAOServiceByAPI implements FAOService {
 //    String faoUrl = "http://data.fao.org/developers/api/v1/en/resources/faostat/crop-prod/measures.json?page=1&pageSize=50&fields=mnemonic AS type_id,label@en AS &sort=label@en";
 //    String types = restTemplate.getForObject(faoUrl, String.class);
 //    String result = FAOJsonHelper.convertJSON(types);
-    return FAOServiceConstants.types;
+    return null;
   }
 
   @Override
   public String getYears() {
-    return FAOServiceConstants.years;
+    return null;
   }
 
   @Override
   public String getCountries() {
-    return FAOServiceConstants.countries;
+    return null;
   }
 
   /**
@@ -85,14 +84,12 @@ public class FAOServiceByAPI implements FAOService {
 
   @Override
   public String getPerItem(int itemID, int measureID, int year) {
-    // TODO
     return null;
   }
 
   @Override
   public String getPerCountryAndTime(int countryID, int measureID,
       List<Integer> items, int yearFrom, int yearTo) {
-    // TODO Auto-generated method stub
     return null;
   }
   
@@ -113,6 +110,5 @@ public class FAOServiceByAPI implements FAOService {
 //    return node.asText();
 //    return "";
 //  }
-  
 
 }

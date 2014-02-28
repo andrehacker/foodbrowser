@@ -29,7 +29,6 @@ public class FAOJsonHelper {
     return converted;
   }
 
-
 //  public static String makePrettyJson(final String json) {
 //    ObjectMapper mapper = new ObjectMapper();
 //    String pretty = "";

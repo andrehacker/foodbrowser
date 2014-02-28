@@ -2,7 +2,8 @@ package de.andrehacker.food.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,17 +16,10 @@ public class FAOController {
   
   FAOService faoService;
 
-  /*
-   * Autowired will inject the desired implementation automatically.
-   * Assumes that there is only one implementation (otherwise what?).
-   * Uses classpath scanning for annotations, e.g. @Service.
-   * Important: This needs @ComponentScan or <context:component-scan ...> specified!
-   */
-  @Autowired
+  @Inject
   FAOController(FAOService faoService) {
     this.faoService = faoService;
   }
-  
 
   /*
    * When the @ResponseBody annotation is used, Spring will return the data in a

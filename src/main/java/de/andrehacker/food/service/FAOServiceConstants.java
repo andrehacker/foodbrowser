@@ -1,11 +1,11 @@
 package de.andrehacker.food.service;
 
 /**
- * The FAO data API does not fit all our needs. Some things have to be hardcoded.
+ * The FAO data API does not fit all our needs, some things have to be hardcoded.
  */
 public class FAOServiceConstants {
 
-  public static final String types = "[{ \"type_id\": 5419, \"name\": \"Yield\", \"unit\": \"Hg/Ha\" }," +
+  public static final String measures = "[{ \"type_id\": 5419, \"name\": \"Yield\", \"unit\": \"Hg/Ha\" }," +
       "{ \"type_id\": 5510, \"name\": \"Production\", \"unit\": \"tonnes\" }," +
       "{ \"type_id\": 5525, \"name\": \"Seed\", \"unit\": \"tonnes\" }," +
       "{ \"type_id\": 5312, \"name\": \"Area Harvested\", \"unit\": \"Ha\" }]";

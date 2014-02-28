@@ -1,12 +1,11 @@
 TODO
 * Bug: Check for empty list when selecting first
 * Bug: Check valid time range
-* Bug: Sorting in year-picker wrong in Chrome
 * Improve intuitivity of time series. Add wizard.
 * Data cleansing:
     * Clean countries: Add ISO3, remove countries without iso3 code.
     * Use real iso in chart (add new column)
-    * Remove redundant data, check meaning of flags
+    * Check meaning of flags
 * Features:
     * Show country strengths: Germany is 4th largest producer of Sugar beet, ...
     * Cluster countries by similar products

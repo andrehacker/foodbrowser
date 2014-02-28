@@ -20,15 +20,19 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
+import de.andrehacker.food.ComponentScanMarker;
 import de.andrehacker.food.service.FAOServiceMongo;
 
 /*
- * Configuration: This is a configuration class, similar to beans xml class
+ * Configuration: This is a configuration class used by IoC container as a source 
+ * for bean definitions, similar to beans xml class.
+ * 
  * EnableWebMvc: Do some "MVC" magic, similar to <mvc:annotation-driven/>
  * 
  * ComponentScan: tells Spring to look for classes annotated with a Spring stereotype 
- * annotation (@Service, @Component, @Repository, @Controller) In our case the package 
- * holds a Controller. Also important for DI, e.g. for @AutoWired.
+ * annotation (@Component, or a specialization @Service, @Controller, @Repository). In our case the package 
+ * holds a Controller. This allows usage of @Inject or @Autowired without manually creating a bean.
+ * I could have also used the basePackages property, but this is not type safe. 
  *   
  * WebMvcConfigurerAdapter allows us to overwrite classes
  *  
@@ -40,9 +44,12 @@ import de.andrehacker.food.service.FAOServiceMongo;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "de.andrehacker.food")
+@ComponentScan(basePackageClasses = ComponentScanMarker.class)
 @PropertySource("classpath:mongodb.properties")
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+  private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/view/";
+  private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
 
   @Autowired
   private Environment env;
@@ -105,8 +112,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     RestTemplate rest = new RestTemplate();
     // Attention, notice the 2 in the jackson converter
     // No need to register, automatically done!
-    // rest.getMessageConverters().add(new
-    // MappingJackson2HttpMessageConverter());
+    // rest.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     System.out.println("The following converters are registered:");
     for (HttpMessageConverter<?> conv : rest.getMessageConverters()) {
       System.out.println("- " + conv.getClass().getSimpleName());
@@ -117,9 +123,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   @Bean
   public InternalResourceViewResolver viewResolver() {
     InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-    resolver.setPrefix("/WEB-INF/view/");
-    // resolver.setSuffix(".jsp");
-    resolver.setSuffix("");
+    resolver.setPrefix(VIEW_RESOLVER_PREFIX);
+    resolver.setSuffix(VIEW_RESOLVER_SUFFIX);
     return resolver;
   }
 
