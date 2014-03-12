@@ -21,13 +21,13 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 import de.andrehacker.food.ComponentScanMarker;
-import de.andrehacker.food.service.FAOServiceMongo;
 
 /*
  * Configuration: This is a configuration class used by IoC container as a source 
  * for bean definitions, similar to beans xml class.
  * 
  * EnableWebMvc: Do some "MVC" magic, similar to <mvc:annotation-driven/>
+ * See http://spring.io/blog/2009/12/21/mvc-simplifications-in-spring-3-0/
  * 
  * ComponentScan: tells Spring to look for classes annotated with a Spring stereotype 
  * annotation (@Component, or a specialization @Service, @Controller, @Repository). In our case the package 
@@ -129,13 +129,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   }
 
   /**
-   * If one bean depends on the other we can simply use the getter
+   * If one bean depends on the other we can simply use the bean-method.
+   * Internally, spring intercepts the method call and looks for an existing
+   * bean in the container instead of creating a new one each time (assuming
+   * that we have the default singleton bean scope).
    */
-  @Bean
-  public FAOServiceMongo faoServiceMongo() throws UnknownHostException {
-    return new FAOServiceMongo(mongoDB());
-  }
+//  @Bean
+//  public FAOServiceMongo faoServiceMongo() throws UnknownHostException {
+//    return new FAOServiceMongo(mongoDB());
+//  }
 
+  /**
+   * Needed for the mongodb fao service implementation
+   */
   @Bean
   public DB mongoDB() throws UnknownHostException {
     DB db = new MongoClient(MONGO_HOST, MONGO_PORT).getDB(MONGO_DB_NAME);

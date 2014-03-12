@@ -3,7 +3,9 @@ package de.andrehacker.food.controller;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,10 +17,18 @@ import de.andrehacker.food.service.FAOService;
 public class FAOController {
   
   FAOService faoService;
+  
+  private static final Logger logger = Logger.getLogger(FAOController.class);
 
+  /*
+   * Alternatively we could have used @Autowired and @Qualifier of spring.
+   * We could also omit @Named and ensure that there is only one bean.
+   */
   @Inject
+  @Named("faoServiceMongo")
   FAOController(FAOService faoService) {
     this.faoService = faoService;
+    logger.info("Construct FAO Controller");
   }
 
   /*

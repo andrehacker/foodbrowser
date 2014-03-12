@@ -57,10 +57,13 @@ ALTER TABLE production ALTER COLUMN element_code TYPE INTEGER;
 ALTER TABLE production ALTER COLUMN element_code SET NOT NULL;
 ALTER TABLE production ALTER COLUMN year TYPE INTEGER;
 ALTER TABLE production ALTER COLUMN year SET NOT NULL;
-ALTER TABLE production ADD INDEX (country_code);
-ALTER TABLE production ADD INDEX (item_code);
-ALTER TABLE production ADD INDEX (element_code);
-ALTER TABLE production ADD INDEX (year);
+
+CREATE INDEX production_country_code_idx ON production(country_code);
+-- Does not work:
+-- ALTER TABLE production ADD INDEX (country_code);
+-- ALTER TABLE production ADD INDEX (item_code);
+-- ALTER TABLE production ADD INDEX (element_code);
+-- ALTER TABLE production ADD INDEX (year);
 
 ALTER TABLE production ADD CONSTRAINT
   FOREIGN KEY (country_code)

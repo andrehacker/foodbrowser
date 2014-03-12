@@ -3,6 +3,7 @@ package de.andrehacker.food.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import de.andrehacker.food.fao.FAOJsonHelper;
@@ -18,7 +19,7 @@ import de.andrehacker.food.fao.FAOJsonHelper;
  * @Service is a specialization of @Component. It enables the 
  * class to be detected during automatic classpath scanning.
  */
-//@Service
+@Service("faoServiceByAPI")
 public class FAOServiceByAPI implements FAOService {
   
   @Autowired

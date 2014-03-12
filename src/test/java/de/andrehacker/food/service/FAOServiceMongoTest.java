@@ -34,7 +34,7 @@ public class FAOServiceMongoTest {
   /*
    * I must use DI to get an instance of the service. Creating it manually
    * causes that the IoC does NOT create the injected instances used within the
-   * service (e.g. RestTemplate)s
+   * service (e.g. RestTemplate)
    * 
    * @Autowired and @Inject can be used interchangeably, autowired is spring
    * specific, inject is Java CDI spec (JSR 330: Dependency Injection for Java).
@@ -57,32 +57,42 @@ public class FAOServiceMongoTest {
     // String json = service.getItems();
     // System.out.println("Items: " + json);
     mockMvc.perform(get("/items").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-        .andExpect(status().isOk()).andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$", hasSize(greaterThan(100)))).andExpect(jsonPath("$[*]._id", hasItem(667)))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json;charset=UTF-8"))
+        .andExpect(jsonPath("$", hasSize(greaterThan(100))))
+        .andExpect(jsonPath("$[*]._id", hasItem(667)))
         .andExpect(jsonPath("$[*].name", hasItem("Tea")));
   }
 
   @Test
   public void testMeasures() throws Exception {
     mockMvc.perform(get("/measures").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-        .andExpect(status().isOk()).andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$", hasSize(greaterThan(1)))).andExpect(jsonPath("$[*]._id", hasItem(5510)))
-        .andExpect(jsonPath("$[*].name", hasItem("Production"))).andExpect(jsonPath("$[*].unit", hasItem("tonnes")));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json;charset=UTF-8"))
+        .andExpect(jsonPath("$", hasSize(greaterThan(1))))
+        .andExpect(jsonPath("$[*]._id", hasItem(5510)))
+        .andExpect(jsonPath("$[*].name", hasItem("Production")))
+        .andExpect(jsonPath("$[*].unit", hasItem("tonnes")));
   }
 
   @Test
   public void testCountries() throws Exception {
     mockMvc.perform(get("/countries").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-        .andExpect(status().isOk()).andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$", hasSize(greaterThan(1)))).andExpect(jsonPath("$[*]._id", hasItem(41)))
-        .andExpect(jsonPath("$[*].iso2", hasItem("CN"))).andExpect(jsonPath("$[*].name", hasItem("China, mainland")));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json;charset=UTF-8"))
+        .andExpect(jsonPath("$", hasSize(greaterThan(1))))
+        .andExpect(jsonPath("$[*]._id", hasItem(41)))
+        .andExpect(jsonPath("$[*].iso2", hasItem("CN")))
+        .andExpect(jsonPath("$[*].name", hasItem("China, mainland")));
   }
 
   @Test
   public void testYears() throws Exception {
     mockMvc.perform(get("/years").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-        .andExpect(status().isOk()).andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$", hasSize(greaterThan(1)))).andExpect(jsonPath("$[*]", hasItem(2011)));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json;charset=UTF-8"))
+        .andExpect(jsonPath("$", hasSize(greaterThan(1))))
+        .andExpect(jsonPath("$[*]", hasItem(2011)));
   }
 
   @Test
@@ -93,9 +103,11 @@ public class FAOServiceMongoTest {
     mockMvc
         .perform(
             get("/peritem?itemid=667&measureid=5510&year=2011").accept(
-                MediaType.parseMediaType("application/json;charset=UTF-8"))).andExpect(status().isOk())
+                MediaType.parseMediaType("application/json;charset=UTF-8")))
+        .andExpect(status().isOk())
         .andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$", hasSize(greaterThan(1)))).andExpect(jsonPath("$[0].country_id", greaterThan(1)))
+        .andExpect(jsonPath("$", hasSize(greaterThan(1))))
+        .andExpect(jsonPath("$[0].country_id", greaterThan(1)))
         .andExpect(jsonPath("$[0].value", greaterThan(1d)));
   }
 
@@ -104,11 +116,12 @@ public class FAOServiceMongoTest {
     // String json = service.getPerCountry(351, 5510, 2011);
     // System.out.println("PerCountry: " + json);
     mockMvc
-        .perform(
-            get("/percountry?countryid=351&measureid=5510&year=2011").accept(
-                MediaType.parseMediaType("application/json;charset=UTF-8"))).andExpect(status().isOk())
+        .perform(get("/percountry?countryid=351&measureid=5510&year=2011").accept(
+                MediaType.parseMediaType("application/json;charset=UTF-8")))
+        .andExpect(status().isOk())
         .andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$", hasSize(greaterThan(1)))).andExpect(jsonPath("$[0].item_id", greaterThan(1)))
+        .andExpect(jsonPath("$", hasSize(greaterThan(1))))
+        .andExpect(jsonPath("$[0].item_id", greaterThan(1)))
         .andExpect(jsonPath("$[0].value", greaterThan(1d)));
   }
 

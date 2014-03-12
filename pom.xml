@@ -15,6 +15,7 @@
 		<version.jboss.as.maven.plugin>7.1.1.Final</version.jboss.as.maven.plugin>
 		<!-- <org.springframework-version>4.0.1.RELEASE</org.springframework-version> -->
 		<org.springframework-version>3.2.7.RELEASE</org.springframework-version>
+		<org.slf4j-version>1.7.6</org.slf4j-version>
 	</properties>
 
 	<!-- Introduced for spring 4 to get correct dependencies. This project does 
@@ -31,6 +32,13 @@
 			<artifactId>spring-webmvc</artifactId>
 			<scope>compile</scope>
 			<version>${org.springframework-version}</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j. -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 
@@ -42,7 +50,7 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- @Inject -->
+		<!-- @Inject. This is supported by spring IoC container. -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -70,6 +78,38 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>2.11.4</version>
 			<scope>compile</scope>
+		</dependency>
+		<!-- For application constraints, like @NotNull or @Min -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+		<!-- Use hibernate as JPA implementation (javax.persistence.EntityManager) -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<!-- jcl-over-slf4j will redirect all calls to commons logging (which is 
+			used by spring) to slf4j. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${org.slf4j-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${org.slf4j-version}</version>
 		</dependency>
 
 		<!-- Tests -->
@@ -141,6 +181,23 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<!-- Test Coverage. Call via mvn clean cobertura:cobertura. Reports are stored in ./target/site/co -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<formats>
+						<format>html</format>
+					</formats>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
 	<profiles>
 		<profile>
 			<id>defaultprofile</id>
@@ -158,9 +215,12 @@
 			</build>
 		</profile>
 		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app  will need. -->
-			<!-- By default that is to put the resulting archive into the 'deployments' folder. -->
+			<!-- When built in OpenShift the 'openshift' profile will be used when 
+				invoking mvn. -->
+			<!-- Use this profile for any OpenShift specific customization your app 
+				will need. -->
+			<!-- By default that is to put the resulting archive into the 'deployments' 
+				folder. -->
 			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
 			<id>openshift</id>
 			<!-- TODO add my property file http://maven.apache.org/plugins/maven-war-plugin/examples/including-excluding-files-from-war.html -->

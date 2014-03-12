@@ -2,6 +2,10 @@ package de.andrehacker.food.service;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
 import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -13,11 +17,8 @@ import com.mongodb.util.JSON;
 /**
  * Implementation of FAOService using the mongodb database with the driver of
  * mongodb (hibernate and/or spring-data implementations might follow).
- * 
- * This class has to be instantiated manually as a bean, because there is no
- * default constructor.
  */
-//@Service
+@Service("faoServiceMongo")
 public class FAOServiceMongo implements FAOService {
   
   private final DB db;
@@ -27,6 +28,7 @@ public class FAOServiceMongo implements FAOService {
    * the client, e.g. for testing we could connect to a test db, or we inject a
    * mock.
    */
+  @Inject
   public FAOServiceMongo(DB db) {
     this.db = db;
   }

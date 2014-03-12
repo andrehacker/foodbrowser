@@ -2,15 +2,15 @@ package de.andrehacker.food.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Product {
+public class Item {
   
-  @JsonProperty("product_name")
+  @JsonProperty("name")
   private String name;
   
-  @JsonProperty("product_code")
+  @JsonProperty("_id")
   private int itemCode;
   
-  public Product(int itemCode, String name) {
+  public Item(int itemCode, String name) {
     this.name = name;
     this.itemCode = itemCode;
   }
