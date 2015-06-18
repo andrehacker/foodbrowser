@@ -245,6 +245,8 @@ var StatsModule = (function() {
         datatable.setCell(i, 1, parseInt(data[i].value), parseInt(data[i].value).toString());  // number and caption
         datatable.setRowProperty(i, 'product_code', data[i].product_code)
       }
+      var formatter1 = new google.visualization.NumberFormat({pattern:'###,###'});
+      formatter1.format(datatable, 1);
       perCountryState.lastDataTable = datatable;
       perCountryState.tableChart.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:PER_COUNTRY_TABLE_SIZE});
 
@@ -284,6 +286,8 @@ var StatsModule = (function() {
           datatable.setCell(year - perCountryTimeState.yearfrom, i+1, parseInt(data[i][year]), parseInt(data[i][year]).toString());
         })
       }
+      var formatter1 = new google.visualization.NumberFormat({pattern:'###,###'});
+      formatter1.format(datatable, 1);
       perCountryTimeState.lineChart.draw(datatable, {height: 300, chartArea:{left:"auto",top:20,width:"80%",height:"80%"}});
     });
   }
