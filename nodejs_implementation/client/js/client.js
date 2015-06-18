@@ -178,6 +178,9 @@ var StatsModule = (function() {
       }
       perProductState.lastDataTable = datatable;
 
+      // See http://stackoverflow.com/questions/18204678/how-to-format-numbers-in-google-api-linechart
+      var formatter1 = new google.visualization.NumberFormat({pattern:'###,###'});
+      formatter1.format(datatable, 1);
       perProductState.geoChart.draw(datatable, optionsGeoChart);
       perProductState.tableChart.draw(datatable, {showRowNumber: true, page: 'enable', pageSize:PER_PRODUCT_TABLE_SIZE});
     });
