@@ -26,7 +26,7 @@ var app = express();
 //connection.connect();
 
 // postgres://USER:PASS@HOST/DATABASE
-var conString = "postgres://postgres:postgres@localhost/tea";
+var conString = "postgres://postgres:postgres@localhost/tea_staging";
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
@@ -79,8 +79,8 @@ app.get('/types', function(req, res) {
  * Supported years
  */
 app.get('/years', function(req, res) {
-  // 1961 - 2012
-  res.json(_.range(1961, 2013));
+  // 1961 - 2013
+  res.json(_.range(1961, 2014));
 });
 
 /*

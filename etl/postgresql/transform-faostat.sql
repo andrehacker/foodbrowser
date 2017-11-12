@@ -13,7 +13,6 @@ ALTER TABLE countries ALTER COLUMN code TYPE INTEGER;
 ALTER TABLE countries ALTER COLUMN code SET NOT NULL;
 -- TODO PRIMARY KEY
 ALTER TABLE countries RENAME COLUMN code TO country_code;
-
 -- Distinguish countries from continents, etc.
 -- 1 = normal country
 -- 2 = other (todo: Divide further into world, continent, region, ...)
@@ -31,7 +30,8 @@ ALTER TABLE items RENAME COLUMN code to item_code;
 -- Extract elements
 DROP TABLE IF EXISTS elements;
 CREATE TABLE elements AS
-  SELECT CAST(element_code AS INTEGER) as code, element_group, element AS name, unit FROM production_raw GROUP BY element_code, element_group, element, unit;
+  SELECT CAST(element_code AS INTEGER) as code, element AS name, unit FROM production_raw GROUP BY element_code, element, unit;
+--  SELECT CAST(element_code AS INTEGER) as code, element_group, element AS name, unit FROM production_raw GROUP BY element_code, element_group, element, unit;
 ALTER TABLE elements ALTER COLUMN code TYPE INTEGER;
 ALTER TABLE elements ALTER COLUMN code SET NOT NULL;
 -- TODO PRIMARY KEY
