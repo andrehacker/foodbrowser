@@ -21,9 +21,11 @@
   },
   "homepage": "https://github.com/andrehacker/tea",
   "dependencies": {
+    "express": "^3.4.8",
+    "logfmt": "~0.18.1",
     "mysql": "~2.0.0-rc2",
-    "express": "~3.4.7",
-    "logfmt": "~0.18.1"
+    "pg": "^8.7.3",
+    "underscore": "^1.13.2"
   },
   "engines": {
     "node": "0.10.24"
