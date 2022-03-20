@@ -33,11 +33,11 @@ var StatsModule = (function() {
   var PER_PRODUCT_TABLE_SIZE = 20;
   var PER_COUNTRY_TABLE_SIZE = 20;
 
-  var INITIAL_PRODUCT_ID = 667;    // 667 = tea
+  var INITIAL_PRODUCT_ID = 667;    // 667 = tea. green coffee = 656
   var INITIAL_COUNTRY_ID = 351;    // 351 = china
-  var INITIAL_YEAR       = 2011;
-  var INITIAL_YEAR_FROM  = 2000;
-  var INITIAL_YEAR_TO    = 2011;
+  var INITIAL_YEAR       = 2020;
+  var INITIAL_YEAR_FROM  = 2010;
+  var INITIAL_YEAR_TO    = 2020;
   var INITIAL_TYPE_ID    = 5510;   // 5510 = production
   var INITIAL_TYPE_DESCRIPTION = 'Production (tonnes)';
 

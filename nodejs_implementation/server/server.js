@@ -7,7 +7,6 @@
  * Hard to say what is better for our purpose...
  */
 
-
 var express = require('express');
 var pg = require('pg');
 var path = require('path');
@@ -16,17 +15,8 @@ var _ = require('underscore');
 // Create express server instance
 var app = express();
 
-//var mysql      = require('mysql');
-//var connection = mysql.createConnection({
-//  host     : 'localhost',
-//  user     : 'root',
-//  password : 'hannek',
-//  database : 'tea'
-//});
-//connection.connect();
-
 // postgres://USER:PASS@HOST/DATABASE
-var conString = "postgres://postgres:postgres@localhost/tea_staging";
+var conString = "postgres://postgres:postgres@localhost:5432/faostat";
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
@@ -79,8 +69,8 @@ app.get('/types', function(req, res) {
  * Supported years
  */
 app.get('/years', function(req, res) {
-  // 1961 - 2013
-  res.json(_.range(1961, 2014));
+  // 1961 - 2020
+  res.json(_.range(1961, 2021));
 });
 
 /*
@@ -96,6 +86,7 @@ app.get('/perproduct', function(req, res) {
     WHERE \
       item_code={productid} \
       AND year={year} \
+      AND p.flag != 'M' \
       AND p.country_code < 5000 \
       AND element_code={typeid} \
     GROUP BY p.country_code \
