@@ -33,9 +33,9 @@ ALTER TABLE production ALTER COLUMN item_code SET NOT NULL;
 ALTER TABLE production ALTER COLUMN year SET NOT NULL;
 
 CREATE INDEX production_country_code_idx ON production(country_code);
-CREATE INDEX production_country_code_idx ON production(item_code);
-CREATE INDEX production_country_code_idx ON production(element_code);
-CREATE INDEX production_country_code_idx ON production(year);
+CREATE INDEX production_item_code_idx ON production(item_code);
+CREATE INDEX production_element_code_idx ON production(element_code);
+CREATE INDEX production_year_idx ON production(year);
 
 ALTER TABLE production ADD CONSTRAINT FK_PRODUCTION_COUNTRY_CODE
   FOREIGN KEY (country_code)

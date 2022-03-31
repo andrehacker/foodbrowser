@@ -52,7 +52,7 @@ POSTGRES_USER="postgres"
 POSTGRES_PWD="postgres"
 DB_NAME="faostat"
 
-# create_container
+create_container
 download_files
 create_db
 load_and_transform
