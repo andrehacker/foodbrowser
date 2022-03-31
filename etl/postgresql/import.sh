@@ -38,6 +38,9 @@ load_and_transform() {
   run_sql "faostat-ddl.sql"
   import_file "faostat-definitions-countries.csv" "countries_raw"
   import_file "faostat-definitions-country-groups.csv" "country_groups_raw"
+  import_file "faostat-definitions-flags.csv" "flags"
+  import_file "faostat-definitions-abbreviations.csv" "abbreviations"
+  import_file "faostat-definitions-units.csv" "units"
   import_file "Production_Crops_Livestock_E_All_Data_(Normalized).csv" "production_raw" "(country_code,country,item_code,item,element_code,element,year_code,year,unit,value,flag)" # csv has not all cols
   import_file "Population_E_All_Data_(Normalized).csv" "production_raw"
   import_file "Trade_CropsLivestock_E_All_Data_(Normalized).csv" "production_raw" "(country_code,country,item_code,item,element_code,element,year_code,year,unit,value,flag)" 

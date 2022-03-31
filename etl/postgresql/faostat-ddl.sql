@@ -74,6 +74,21 @@ CREATE TABLE elements (
   unit varchar(50)
 );
 
+CREATE TABLE units (
+  unit_code varchar(40) PRIMARY KEY,
+  description varchar(500)
+);
+
+CREATE TABLE flags (
+  flag_code varchar(20) PRIMARY KEY,
+  description varchar(500)
+);
+
+CREATE TABLE abbreviations (
+  abbreviation_code varchar(40) PRIMARY KEY,
+  description varchar(500)
+);
+
 CREATE TABLE production (
   country_code INTEGER NOT NULL,
   item_code    INTEGER NOT NULL,
