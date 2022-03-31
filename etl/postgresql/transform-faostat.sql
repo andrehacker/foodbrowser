@@ -1,38 +1,23 @@
 
--- Countries are based on M49 UN classification
--- See http://unstats.un.org/unsd/methods/m49/m49alpha.htm
--- Google expects ISO 3166-1
+-- DIMENSION TABLES -----
 
--- ----- CREATE DIMENSION TABLES -----
+-- One can derive countries from fact table, but downside is there is no additional info about the countries except country code and name. So we take the csv from faostat.
+-- some country_codes have two entries
+insert into countries select country_code, max(name), max(m49_code), max(iso2_code), max(iso3_code), max(start_year), max(end_year), 1 from countries_raw group by country_code;
+update countries set type = 2 where country_code >= 400;
+-- Trade data have additional country codes like "Africa (excluding intra-trade)". They are not in definitions and standards.
+insert into countries
+  select cast(country_code as INTEGER), min(country), null, null, null, null, null, 3 from production_raw where country like '%excluding intra-trade%' group by country_code;
 
--- Extract countries
--- DON'T TAKE THIS, USE THE countries.sql INSTEAD!
---DROP TABLE IF EXISTS countries;
---CREATE TABLE countries AS SELECT CAST(country_code AS INTEGER) as code, country AS name FROM production_raw GROUP BY country_code, country;
---ALTER TABLE countries ALTER COLUMN code TYPE INTEGER;
---ALTER TABLE countries ALTER COLUMN code SET NOT NULL;
--- TODO PRIMARY KEY
---ALTER TABLE countries RENAME COLUMN code TO country_code;
--- Distinguish countries from continents, etc.
--- 1 = normal country
--- 2 = other (todo: Divide further into world, continent, region, ...)
---ALTER TABLE countries ADD COLUMN type INTEGER NOT NULL DEFAULT 1;
-UPDATE countries set type = 2 where country_code >= 5000;
+INSERT INTO items
+  SELECT CAST(item_code AS INTEGER), item AS name FROM production_raw GROUP BY item_code, item;
 
--- Extract items
-DROP TABLE IF EXISTS items;
-CREATE TABLE items AS SELECT CAST(item_code AS INTEGER) as item_code, item AS name FROM production_raw GROUP BY item_code, item;
-ALTER TABLE items ALTER COLUMN item_code SET NOT NULL;
-ALTER TABLE items ADD PRIMARY KEY(item_code);
+INSERT INTO elements
+  SELECT CAST(element_code AS INTEGER), element AS name, unit FROM production_raw GROUP BY element_code, element, unit;
 
--- Extract elements
-DROP TABLE IF EXISTS elements;
-CREATE TABLE elements AS
-  SELECT CAST(element_code AS INTEGER) as element_code, element AS name, unit FROM production_raw GROUP BY element_code, element, unit;
-ALTER TABLE elements ADD PRIMARY KEY(element_code);
+-- FACT TABLE --
 
--- ----- TRANSFORM FACT TABLE -----
--- TODO: Indices, foreign keys, not-null
+-- Create as select and transform (indices, foreign keys) is faster than insert into select into empty table
 DROP TABLE IF EXISTS production;
 CREATE TABLE production AS
   SELECT
@@ -43,28 +28,20 @@ CREATE TABLE production AS
     CAST(value AS DECIMAL(20,5)) AS value,
     flag
     FROM production_raw;
-ALTER TABLE production ALTER COLUMN country_code TYPE INTEGER;
 ALTER TABLE production ALTER COLUMN country_code SET NOT NULL;
-ALTER TABLE production ALTER COLUMN item_code TYPE INTEGER;
 ALTER TABLE production ALTER COLUMN item_code SET NOT NULL;
-ALTER TABLE production ALTER COLUMN element_code TYPE INTEGER;
-ALTER TABLE production ALTER COLUMN element_code SET NOT NULL;
-ALTER TABLE production ALTER COLUMN year TYPE INTEGER;
 ALTER TABLE production ALTER COLUMN year SET NOT NULL;
 
 CREATE INDEX production_country_code_idx ON production(country_code);
--- Does not work:
--- ALTER TABLE production ADD INDEX (country_code);
--- ALTER TABLE production ADD INDEX (item_code);
--- ALTER TABLE production ADD INDEX (element_code);
--- ALTER TABLE production ADD INDEX (year);
+CREATE INDEX production_country_code_idx ON production(item_code);
+CREATE INDEX production_country_code_idx ON production(element_code);
+CREATE INDEX production_country_code_idx ON production(year);
 
 ALTER TABLE production ADD CONSTRAINT FK_PRODUCTION_COUNTRY_CODE
   FOREIGN KEY (country_code)
   REFERENCES countries(country_code)
   ON UPDATE CASCADE ON DELETE RESTRICT;
 
--- DID NOT WORK?!
 ALTER TABLE production ADD CONSTRAINT FK_PRODUCTION_ELEMENT_CODE
   FOREIGN KEY (element_code)
   REFERENCES elements(element_code)
@@ -76,6 +53,7 @@ ALTER TABLE production ADD CONSTRAINT FK_PRODUCTION_ITEM_CODE
   ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
-
 -- Handle flags
 -- flags are data quality indicators. "These flags would indicate to the user the source and, thus, the reliability of the data"
+
+
