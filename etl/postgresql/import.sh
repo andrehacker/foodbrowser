@@ -13,6 +13,8 @@ download_files() {
   unzip -n Production_Crops_Livestock_E_All_Data_\(Normalized\).zip
   wget -nc https://fenixservices.fao.org/faostat/static/bulkdownloads/Trade_CropsLivestock_E_All_Data_\(Normalized\).zip
   unzip -n Trade_CropsLivestock_E_All_Data_\(Normalized\).zip
+  wget -nc https://fenixservices.fao.org/faostat/static/bulkdownloads/Trade_DetailedTradeMatrix_E_All_Data_\(Normalized\).zip
+  unzip -n Trade_DetailedTradeMatrix_E_All_Data_\(Normalized\).zip
 }
 
 run_sql() {
@@ -41,9 +43,11 @@ load_and_transform() {
   import_file "faostat-definitions-flags.csv" "flags"
   import_file "faostat-definitions-abbreviations.csv" "abbreviations"
   import_file "faostat-definitions-units.csv" "units"
+  import_file "faostat-definitions-items.csv" "items_raw"
   import_file "Production_Crops_Livestock_E_All_Data_(Normalized).csv" "production_raw" "(country_code,country,item_code,item,element_code,element,year_code,year,unit,value,flag)" # csv has not all cols
   import_file "Population_E_All_Data_(Normalized).csv" "production_raw"
   import_file "Trade_CropsLivestock_E_All_Data_(Normalized).csv" "production_raw" "(country_code,country,item_code,item,element_code,element,year_code,year,unit,value,flag)" 
+  import_file "Trade_DetailedTradeMatrix_E_All_Data_(Normalized).csv" "tradematrix_raw"
   
   run_sql "transform-faostat.sql"
 
@@ -55,7 +59,7 @@ POSTGRES_USER="postgres"
 POSTGRES_PWD="postgres"
 DB_NAME="faostat"
 
-create_container
+#create_container
 download_files
 create_db
 load_and_transform

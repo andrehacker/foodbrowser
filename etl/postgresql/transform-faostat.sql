@@ -8,9 +8,19 @@ update countries set type = 2 where country_code >= 400;
 -- Trade data have additional country codes like "Africa (excluding intra-trade)". They are not in definitions and standards.
 insert into countries
   select cast(country_code as INTEGER), min(country), null, null, null, null, null, 3 from production_raw where country like '%excluding intra-trade%' group by country_code;
+-- Trade detailed matrix contains 34  Canton and Enderbury Islands missing in defs & standards
+insert into countries values (34, 'Canton and Enderbury Islands', null, null, null, null, null, 1);
+
+--INSERT INTO items
+--  SELECT CAST(item_code AS INTEGER), item AS name FROM production_raw GROUP BY item_code, item;
 
 INSERT INTO items
-  SELECT CAST(item_code AS INTEGER), item AS name FROM production_raw GROUP BY item_code, item;
+  SELECT item_code, min(name) from (
+    SELECT CAST(item_code AS INTEGER), item AS name FROM production_raw GROUP BY item_code, item
+    UNION
+    SELECT CAST(item_code AS INTEGER), item AS name FROM tradematrix_raw GROUP BY item_code, item
+  ) q group by item_code
+;
 
 INSERT INTO elements
   SELECT CAST(element_code AS INTEGER), element AS name, unit FROM production_raw GROUP BY element_code, element, unit;
@@ -48,6 +58,50 @@ ALTER TABLE production ADD CONSTRAINT FK_PRODUCTION_ELEMENT_CODE
   ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE production ADD CONSTRAINT FK_PRODUCTION_ITEM_CODE
+  FOREIGN KEY (item_code)
+  REFERENCES items(item_code)
+  ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+
+DROP TABLE IF EXISTS tradematrix;
+CREATE TABLE tradematrix AS
+  SELECT
+    CAST(country_code AS INTEGER) AS country_code,
+    CAST(partner_country_code AS INTEGER) AS partner_country_code,
+    CAST(item_code AS INTEGER) AS item_code,
+    CAST(element_code AS INTEGER) AS element_code,
+    CAST(year AS INTEGER) AS year,
+    CAST(value AS DECIMAL(20,5)) AS value,
+    flag
+    FROM tradematrix_raw;
+ALTER TABLE tradematrix ALTER COLUMN country_code SET NOT NULL;
+ALTER TABLE tradematrix ALTER COLUMN partner_country_code SET NOT NULL;
+ALTER TABLE tradematrix ALTER COLUMN item_code SET NOT NULL;
+ALTER TABLE tradematrix ALTER COLUMN year SET NOT NULL;
+
+CREATE INDEX tradematrix_country_code_idx ON tradematrix(country_code);
+CREATE INDEX tradematrix_partner_country_code_idx ON tradematrix(partner_country_code);
+CREATE INDEX tradematrix_item_code_idx ON tradematrix(item_code);
+CREATE INDEX tradematrix_element_code_idx ON tradematrix(element_code);
+CREATE INDEX tradematrix_year_idx ON tradematrix(year);
+
+ALTER TABLE tradematrix ADD CONSTRAINT FK_TRADEMATRIX_COUNTRY_CODE
+  FOREIGN KEY (country_code)
+  REFERENCES countries(country_code)
+  ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE tradematrix ADD CONSTRAINT FK_TRADEMATRIX_PARTNER_COUNTRY_CODE
+  FOREIGN KEY (partner_country_code)
+  REFERENCES countries(country_code)
+  ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE tradematrix ADD CONSTRAINT FK_TRADEMATRIX_ELEMENT_CODE
+  FOREIGN KEY (element_code)
+  REFERENCES elements(element_code)
+  ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE tradematrix ADD CONSTRAINT FK_TRADEMATRIX_ITEM_CODE
   FOREIGN KEY (item_code)
   REFERENCES items(item_code)
   ON UPDATE CASCADE ON DELETE RESTRICT;

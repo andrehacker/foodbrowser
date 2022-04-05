@@ -18,6 +18,22 @@ CREATE TABLE production_raw (
   note VARCHAR(100)  -- 2022-03-20: this was in Population, but not in Production data
 );
 
+CREATE TABLE tradematrix_raw (
+  country_code VARCHAR(10),
+  country VARCHAR(70),
+  partner_country_code VARCHAR(10),
+  partner_country VARCHAR(70),
+  item_code VARCHAR(10),
+  item VARCHAR(100),
+  element_code VARCHAR(10),
+  element VARCHAR(100),
+  year_code VARCHAR(4),
+  year VARCHAR(4),
+  unit VARCHAR(50),
+  value VARCHAR(20),
+  flag VARCHAR(10)
+);
+
 
 -- Faostat has it's own country code. Download is offered under "Definitions and Standards" on faostat:
 -- https://www.fao.org/faostat/en/#definitions
@@ -68,6 +84,18 @@ CREATE TABLE items (
   name varchar(100)
 );
 
+CREATE TABLE items_raw (
+  domain_code varchar(5),
+  domain varchar(200),
+  item_code varchar(40),
+  item_name varchar(300),
+  description varchar(5000),
+  hs_code varchar(100),
+  hs07_code varchar(1000),  -- can contain multi-value like "010110, 010190"
+  hs12_code varchar(1000),
+  cpc_code varchar(200)
+);
+
 CREATE TABLE elements (
   element_code INTEGER PRIMARY KEY,
   name varchar(100),
@@ -89,33 +117,3 @@ CREATE TABLE abbreviations (
   description varchar(500)
 );
 
-CREATE TABLE production (
-  country_code INTEGER NOT NULL,
-  item_code    INTEGER NOT NULL,
-  element_code INTEGER NOT NULL,
-  year         INTEGER NOT NULL,
-  value        DECIMAL(20,5),
-  flag         varchar(10)
---  CONSTRAINT FK_PRODUCTION_COUNTRY_CODE
---    FOREIGN KEY (country_code)
---    REFERENCES countries(country_code)
---    ON UPDATE CASCADE ON DELETE RESTRICT,
---  CONSTRAINT FK_PRODUCTION_ELEMENT_CODE
---    FOREIGN KEY (element_code)
---    REFERENCES elements(element_code)
---    ON UPDATE CASCADE ON DELETE RESTRICT,
---  CONSTRAINT FK_PRODUCTION_ITEM_CODE
---    FOREIGN KEY (item_code)
---    REFERENCES items(item_code)
---    ON UPDATE CASCADE ON DELETE RESTRICT
-);
---CREATE INDEX production_country_code_idx ON production(country_code);
-
--- older variant (from excel no longer available)
---CREATE TABLE countries (
---        country_code  integer PRIMARY KEY,
---        iso_code      char(2) NOT NULL,
---        name          varchar(100) NOT NULL,
---        long_name     varchar(100) NOT NULL,
---        type          int NOT NULL DEFAULT 1
---);
