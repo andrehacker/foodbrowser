@@ -6,15 +6,15 @@ create_container() {
   docker run --name $CONTAINER_NAME -p 5432:5432 -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PWD -d postgres
   # wait until ready
   RETRIES=10
-  until docker exec -it $CONTAINER_NAME psql -U $POSTGRES_USER -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+  until docker exec $CONTAINER_NAME psql -U $POSTGRES_USER -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
     echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
     sleep 1
   done
 }
 
 create_db() {
-  docker exec -it $CONTAINER_NAME psql -U $POSTGRES_USER -c "DROP DATABASE IF EXISTS $DB_NAME"
-  docker exec -it $CONTAINER_NAME psql -U $POSTGRES_USER -c "CREATE DATABASE $DB_NAME"
+  docker exec $CONTAINER_NAME psql -U $POSTGRES_USER -c "DROP DATABASE IF EXISTS $DB_NAME"
+  docker exec $CONTAINER_NAME psql -U $POSTGRES_USER -c "CREATE DATABASE $DB_NAME"
 }
 
 download_file() {
@@ -30,13 +30,13 @@ import_file() {
   targettable=$2
   columns=$3 # optional
   docker cp "$sourcefile" $CONTAINER_NAME:/tmp/
-  docker exec -it $CONTAINER_NAME psql -U $POSTGRES_USER -d $DB_NAME -c "COPY $targettable $columns FROM '/tmp/$sourcefilename' WITH ENCODING 'latin1' DELIMITER ',' CSV HEADER QUOTE '\"' ESCAPE '\"';"
+  docker exec $CONTAINER_NAME psql -U $POSTGRES_USER -d $DB_NAME -c "COPY $targettable $columns FROM '/tmp/$sourcefilename' WITH ENCODING 'latin1' DELIMITER ',' CSV HEADER QUOTE '\"' ESCAPE '\"';"
 }
 
 run_sql() {
   sqlfile=$1
   docker cp $sqlfile $CONTAINER_NAME:/tmp/
-  docker exec -it $CONTAINER_NAME psql -U $POSTGRES_USER -d $DB_NAME -f /tmp/$sqlfile -a -v ON_ERROR_STOP=1
+  docker exec $CONTAINER_NAME psql -U $POSTGRES_USER -d $DB_NAME -f /tmp/$sqlfile -a -v ON_ERROR_STOP=1
 }
 
 load_and_transform() {
