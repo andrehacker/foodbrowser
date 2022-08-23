@@ -15,5 +15,6 @@ jobs:
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
-      run: cd etl/postgresql
-           time bash echo 'test'
+      run: |
+        cd etl/postgresql
+        time bash echo 'test'
