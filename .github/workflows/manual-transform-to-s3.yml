@@ -13,8 +13,11 @@ jobs:
   import:
     runs-on: ubuntu-latest
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Import and transform
       run: |
         cd etl/postgresql
         time bash -x import.sh
