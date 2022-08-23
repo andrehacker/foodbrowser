@@ -1,0 +1,19 @@
+# 
+# 1. Download data from faostat
+# 2. Load into postgres
+# 3. Transform
+# 4. Export to S3, for easy importing on-demand
+
+name: faostat-transform-to-s3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: cd etl/postgresql
+           time bash echo 'test'
