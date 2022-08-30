@@ -24,6 +24,9 @@ jobs:
       run: |
         cd etl/postgresql
         time bash -x import.sh
+    - name: Export to S3
+      run: |
+        bash -x export-to-s3.sh
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -32,6 +35,6 @@ jobs:
         aws-region: eu-west-1
     - name: Upload to S3
       run: |
-        echo "test" > /tmp/test.txt
-        aws s3 cp /tmp/test.txt s3://foodbrowser/test.txt
+        prefix=$(date +'%Y%m%d-%H%M%S')
+        aws s3 cp /tmp/export s3://foodbrowser/$prefix/ --recursive
 
