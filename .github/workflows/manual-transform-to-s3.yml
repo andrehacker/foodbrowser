@@ -24,16 +24,16 @@ jobs:
       run: |
         cd etl/postgresql
         time bash -x import.sh
-    - name: Export to S3
+    - name: Export to csv archives
       run: |
         bash -x export-to-s3.sh
-    - name: configure aws credentials
+    - name: Configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: arn:aws:iam::779071549559:role/aws-github-oidc-foodbrowser
         role-session-name: foodbrowser-write-to-s3-role-session
         aws-region: eu-west-1
-    - name: Upload to S3
+    - name: Upload csv archives to S3
       run: |
         prefix=$(date +'%Y%m%d-%H%M%S')
         aws s3 cp /tmp/export s3://foodbrowser/$prefix/ --recursive
