@@ -26,6 +26,7 @@ jobs:
         time bash -x import.sh
     - name: Export to csv archives
       run: |
+        cd etl/postgresql
         bash -x export-to-s3.sh
     - name: Configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
