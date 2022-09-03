@@ -36,6 +36,6 @@ jobs:
         aws-region: eu-west-1
     - name: Upload csv archives to S3
       run: |
-        prefix=$(date +'%Y%m%d-%H%M%S')
+        prefix=$(TZ=":Europe/Berlin" date +'%Y%m%d-%H%M%S')
         aws s3 cp /tmp/export s3://foodbrowser/$prefix/ --recursive
 
