@@ -1,25 +1,5 @@
 
 
-## Openshift deployment
-* Have to make sure that the 500 MB memory limit of the free gear is not exceeded: https://www.openshift.com/forums/openshift/error-in-gear-postreceive
-* Only Java 1.6 worked for me with JBoss Enterprise Application Platform 6. 1.7 failed.
-
-MongoDB connection details: https://www.openshift.com/forums/openshift/connecting-to-mongodb-gear-using-your-local-mongo-client-and-rhc-port-forwarding
-```
-OPENSHIFT_MONGODB_DB_LOG_DIR=/var/lib/openshift/530613a84382ecb92b000128/mongodb//log/
-OPENSHIFT_MONGODB_DB_USERNAME=admin
-OPENSHIFT_MONGODB_DB_PASSWORD=3CBVH8Q_6mE7
-OPENSHIFT_MONGODB_IDENT=redhat:mongodb:2.2:0.2.5
-OPENSHIFT_MONGODB_DB_HOST=127.10.126.130
-OPENSHIFT_MONGODB_DB_URL=mongodb://admin:3CBVH8Q_6mE7@127.10.126.130:27017/
-OPENSHIFT_MONGODB_DB_PORT=27017
-OPENSHIFT_MONGODB_DIR=/var/lib/openshift/530613a84382ecb92b000128/mongodb/
-```
-
-## Openshift data upload
-Upload files to $OPENSHIFT_DATA_DIR
-scp facts-export.json.gz 530613a84382ecb92b000128@foodbrowser-andrehacker.rhcloud.com:/var/lib/openshift/530613a84382ecb92b000128/app-root/data/
-
 ## Export and Import (Postgres => MongoDB)
 COPY countries TO '/home/andre/dev/csv-export/countries.csv'  DELIMITER ',' CSV HEADER;
 COPY elements TO '/home/andre/dev/csv-export/measures.csv'  DELIMITER ',' CSV HEADER;
